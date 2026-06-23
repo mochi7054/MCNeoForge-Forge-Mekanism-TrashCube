@@ -48,7 +48,11 @@ public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implemen
 
         // Setup side configs for Item, Fluid, Chemical, Energy
         // setupInputConfig only registers INPUT and NONE states
-        configComponent.setupInputConfig(TransmissionType.ITEM, Arrays.asList(trashSlots));
+        mekanism.common.tile.component.config.ConfigInfo itemConfig = configComponent.getConfig(TransmissionType.ITEM);
+        if (itemConfig != null) {
+            itemConfig.addSlotInfo(mekanism.common.tile.component.config.DataType.INPUT, mekanism.common.tile.component.TileComponentConfig.createInfo(TransmissionType.ITEM, true, false, Arrays.asList(trashSlots)));
+            itemConfig.setCanEject(false);
+        }
         configComponent.setupInputConfig(TransmissionType.FLUID, fluidTank);
         configComponent.setupInputConfig(TransmissionType.CHEMICAL, chemicalTank);
         configComponent.setupInputConfig(TransmissionType.ENERGY, energyContainer);
