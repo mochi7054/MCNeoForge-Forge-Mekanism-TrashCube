@@ -18,6 +18,7 @@ import mekanism.common.capabilities.holder.slot.IInventorySlotHolder;
 import mekanism.common.capabilities.holder.slot.InventorySlotHelper;
 import mekanism.common.inventory.slot.BasicInventorySlot;
 import mekanism.common.lib.transmitter.TransmissionType;
+import mekanism.common.tile.component.TileComponentEjector;
 import mekanism.common.tile.prefab.TileEntityConfigurableMachine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -40,6 +41,8 @@ public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implemen
 
     public TrashCubeBlockEntity(BlockPos pos, BlockState state) {
         super(state.getBlockHolder(), pos, state);
+
+        ejectorComponent = new TileComponentEjector(this);
 
         // Setup side configs for Item, Fluid, Chemical, Energy
         // setupInputConfig only registers INPUT and NONE states
