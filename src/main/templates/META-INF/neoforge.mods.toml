@@ -1,0 +1,36 @@
+modLoader = "javafml"
+loaderVersion = "${loader_version_range}"
+license = "${mod_license}"
+
+[[mods]]
+modId = "${mod_id}"
+version = "${mod_version}"
+displayName = "${mod_name}"
+authors = "mochi7054"
+credits = "Thanks to Mekanism developers."
+displayURL = "https://github.com/mochi7054/MCNeoForge-Forge-Mekanism-TrashCube"
+license = "${mod_license}"
+description = '''
+A Mekanism addon that adds a Trash Cube block to void items, fluids, and chemicals.
+'''
+
+[[dependencies.${mod_id}]]
+modId = "minecraft"
+mandatory = true
+versionRange = "${minecraft_version_range}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "neoforge"
+mandatory = true
+versionRange = "[${neo_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "mekanism"
+mandatory = true
+versionRange = "[10.7.19,)"
+ordering = "NONE"
+side = "BOTH"
