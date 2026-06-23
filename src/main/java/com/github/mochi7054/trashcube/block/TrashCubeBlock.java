@@ -2,11 +2,17 @@ package com.github.mochi7054.trashcube.block;
 
 import com.github.mochi7054.trashcube.TrashCube;
 import com.github.mochi7054.trashcube.block.entity.TrashCubeBlockEntity;
+import mekanism.api.Upgrade;
+import mekanism.api.text.EnumColor;
+import mekanism.api.text.ILangEntry;
 import mekanism.common.block.prefab.BlockTile;
 import mekanism.common.content.blocktype.BlockTypeTile;
-import mekanism.common.lib.transmitter.TransmissionType;
 import mekanism.api.math.FloatingLong;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import java.util.Collections;
 
 public class TrashCubeBlock extends BlockTile<TrashCubeBlockEntity, BlockTypeTile<TrashCubeBlockEntity>> {
 
@@ -15,30 +21,41 @@ public class TrashCubeBlock extends BlockTile<TrashCubeBlockEntity, BlockTypeTil
     }
 
     private static BlockTypeTile<TrashCubeBlockEntity> createBlockType() {
+        ILangEntry langEntry = new ILangEntry() {
+            @Override
+            public String getTranslationKey() {
+                return "container.mekanismtrashcube.trash_cube";
+            }
+            @Override
+            public MutableComponent translate(Object... args) {
+                return Component.translatable(getTranslationKey(), args);
+            }
+            @Override
+            public MutableComponent translateColored(EnumColor color, Object... args) {
+                return translate(args).withStyle(style -> style.withColor(color.getColor()));
+            }
+            @Override
+            public MutableComponent translateColored(TextColor color, Object... args) {
+                return translate(args).withStyle(style -> style.withColor(color));
+            }
+        };
+
         BlockTypeTile<TrashCubeBlockEntity> blockType = new BlockTypeTile<>(
             () -> TrashCube.TILE,
-            () -> "container.mekanismtrashcube.trash_cube"
+            langEntry
         );
 
         blockType.add(
             new mekanism.common.block.attribute.AttributeEnergy(() -> FloatingLong.ZERO, () -> FloatingLong.MAX_VALUE),
-            mekanism.common.block.attribute.AttributeUpgradeSupport.ANCHOR_ONLY,
-            mekanism.common.block.attribute.AttributeSideConfig.create(
-                TransmissionType.ITEM,
-                TransmissionType.ENERGY,
-                TransmissionType.FLUID,
-                TransmissionType.GAS,
-                TransmissionType.INFUSION,
-                TransmissionType.PIGMENT,
-                TransmissionType.SLURRY
-            ),
+            new mekanism.common.block.attribute.AttributeUpgradeSupport(Collections.singleton(Upgrade.ANCHOR)),
             mekanism.common.block.attribute.Attributes.ACTIVE,
             mekanism.common.block.attribute.Attributes.REDSTONE,
             mekanism.common.block.attribute.Attributes.SECURITY,
             new mekanism.common.block.attribute.AttributeStateFacing(),
-            new mekanism.common.block.attribute.AttributeGui(() -> TrashCube.CONTAINER_TYPE, () -> "container.mekanismtrashcube.trash_cube")
+            new mekanism.common.block.attribute.AttributeGui(() -> TrashCube.CONTAINER_TYPE, langEntry)
         );
 
         return blockType;
     }
 }
+

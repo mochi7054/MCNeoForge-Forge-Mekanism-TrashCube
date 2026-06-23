@@ -10,29 +10,28 @@ import com.github.mochi7054.trashcube.fluid.VoidFluidHandler;
 import com.github.mochi7054.trashcube.inventory.TrashCubeMenu;
 import com.github.mochi7054.trashcube.inventory.VoidItemHandler;
 import mekanism.api.IContentsListener;
-import mekanism.api.chemical.gas.BasicGasTank;
+import mekanism.api.chemical.ChemicalTankBuilder;
 import mekanism.api.chemical.gas.IGasTank;
 import mekanism.api.chemical.gas.IGasHandler;
-import mekanism.api.chemical.infuse.BasicInfusionTank;
 import mekanism.api.chemical.infuse.IInfusionTank;
 import mekanism.api.chemical.infuse.IInfusionHandler;
-import mekanism.api.chemical.pigment.BasicPigmentTank;
 import mekanism.api.chemical.pigment.IPigmentTank;
 import mekanism.api.chemical.pigment.IPigmentHandler;
-import mekanism.api.chemical.slurry.BasicSlurryTank;
 import mekanism.api.chemical.slurry.ISlurryTank;
 import mekanism.api.chemical.slurry.ISlurryHandler;
 import mekanism.api.energy.IStrictEnergyHandler;
 import mekanism.common.capabilities.energy.MachineEnergyContainer;
 import mekanism.common.capabilities.fluid.BasicFluidTank;
-import mekanism.common.capabilities.holder.chemical.GasTankHelper;
-import mekanism.common.capabilities.holder.chemical.IGasTankHolder;
-import mekanism.common.capabilities.holder.chemical.InfusionTankHelper;
-import mekanism.common.capabilities.holder.chemical.IInfusionTankHolder;
-import mekanism.common.capabilities.holder.chemical.PigmentTankHelper;
-import mekanism.common.capabilities.holder.chemical.IPigmentTankHolder;
-import mekanism.common.capabilities.holder.chemical.SlurryTankHelper;
-import mekanism.common.capabilities.holder.chemical.ISlurryTankHolder;
+import mekanism.api.chemical.gas.Gas;
+import mekanism.api.chemical.gas.GasStack;
+import mekanism.api.chemical.infuse.InfuseType;
+import mekanism.api.chemical.infuse.InfusionStack;
+import mekanism.api.chemical.pigment.Pigment;
+import mekanism.api.chemical.pigment.PigmentStack;
+import mekanism.api.chemical.slurry.Slurry;
+import mekanism.api.chemical.slurry.SlurryStack;
+import mekanism.common.capabilities.holder.chemical.ChemicalTankHelper;
+import mekanism.common.capabilities.holder.chemical.IChemicalTankHolder;
 import mekanism.common.capabilities.holder.energy.EnergyContainerHelper;
 import mekanism.common.capabilities.holder.energy.IEnergyContainerHolder;
 import mekanism.common.capabilities.holder.fluid.FluidTankHelper;
@@ -121,7 +120,7 @@ public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implemen
     @NotNull
     @Override
     protected IInventorySlotHolder getInitialInventory(IContentsListener listener) {
-        InventorySlotHelper builder = InventorySlotHelper.forSideWithConfig(this);
+        InventorySlotHelper builder = InventorySlotHelper.forSideWithConfig(this::getDirection, this::getConfig);
         trashSlot = BasicInventorySlot.at(listener, 80, 35);
         builder.addSlot(trashSlot);
         return builder.build();
@@ -130,7 +129,7 @@ public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implemen
     @NotNull
     @Override
     protected IFluidTankHolder getInitialFluidTanks(IContentsListener listener) {
-        FluidTankHelper builder = FluidTankHelper.forSideWithConfig(this);
+        FluidTankHelper builder = FluidTankHelper.forSideWithConfig(this::getDirection, this::getConfig);
         fluidTank = BasicFluidTank.create(1000000, listener);
         builder.addTank(fluidTank);
         return builder.build();
@@ -138,36 +137,36 @@ public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implemen
 
     @NotNull
     @Override
-    protected IGasTankHolder getInitialGasTanks(IContentsListener listener) {
-        GasTankHelper builder = GasTankHelper.forSideWithConfig(this);
-        gasTank = BasicGasTank.create(1000000L, listener);
+    public IChemicalTankHolder<Gas, GasStack, IGasTank> getInitialGasTanks(IContentsListener listener) {
+        ChemicalTankHelper<Gas, GasStack, IGasTank> builder = ChemicalTankHelper.forSideGasWithConfig(this::getDirection, this::getConfig);
+        gasTank = ChemicalTankBuilder.GAS.create(1000000L, listener);
         builder.addTank(gasTank);
         return builder.build();
     }
 
     @NotNull
     @Override
-    protected IInfusionTankHolder getInitialInfusionTanks(IContentsListener listener) {
-        InfusionTankHelper builder = InfusionTankHelper.forSideWithConfig(this);
-        infusionTank = BasicInfusionTank.create(1000000L, listener);
+    public IChemicalTankHolder<InfuseType, InfusionStack, IInfusionTank> getInitialInfusionTanks(IContentsListener listener) {
+        ChemicalTankHelper<InfuseType, InfusionStack, IInfusionTank> builder = ChemicalTankHelper.forSideInfusionWithConfig(this::getDirection, this::getConfig);
+        infusionTank = ChemicalTankBuilder.INFUSION.create(1000000L, listener);
         builder.addTank(infusionTank);
         return builder.build();
     }
 
     @NotNull
     @Override
-    protected IPigmentTankHolder getInitialPigmentTanks(IContentsListener listener) {
-        PigmentTankHelper builder = PigmentTankHelper.forSideWithConfig(this);
-        pigmentTank = BasicPigmentTank.create(1000000L, listener);
+    public IChemicalTankHolder<Pigment, PigmentStack, IPigmentTank> getInitialPigmentTanks(IContentsListener listener) {
+        ChemicalTankHelper<Pigment, PigmentStack, IPigmentTank> builder = ChemicalTankHelper.forSidePigmentWithConfig(this::getDirection, this::getConfig);
+        pigmentTank = ChemicalTankBuilder.PIGMENT.create(1000000L, listener);
         builder.addTank(pigmentTank);
         return builder.build();
     }
 
     @NotNull
     @Override
-    protected ISlurryTankHolder getInitialSlurryTanks(IContentsListener listener) {
-        SlurryTankHelper builder = SlurryTankHelper.forSideWithConfig(this);
-        slurryTank = BasicSlurryTank.create(1000000L, listener);
+    public IChemicalTankHolder<Slurry, SlurryStack, ISlurryTank> getInitialSlurryTanks(IContentsListener listener) {
+        ChemicalTankHelper<Slurry, SlurryStack, ISlurryTank> builder = ChemicalTankHelper.forSideSlurryWithConfig(this::getDirection, this::getConfig);
+        slurryTank = ChemicalTankBuilder.SLURRY.create(1000000L, listener);
         builder.addTank(slurryTank);
         return builder.build();
     }
@@ -175,46 +174,37 @@ public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implemen
     @NotNull
     @Override
     protected IEnergyContainerHolder getInitialEnergyContainers(IContentsListener listener) {
-        EnergyContainerHelper builder = EnergyContainerHelper.forSideWithConfig(this);
+        EnergyContainerHelper builder = EnergyContainerHelper.forSideWithConfig(this::getDirection, this::getConfig);
         energyContainer = MachineEnergyContainer.input(this, listener);
         builder.addContainer(energyContainer);
         return builder.build();
     }
 
     @Override
-    protected boolean onUpdateServer() {
-        boolean sendUpdate = super.onUpdateServer();
+    protected void onUpdateServer() {
+        super.onUpdateServer();
 
         if (!trashSlot.isEmpty()) {
             trashSlot.setStack(ItemStack.EMPTY);
-            sendUpdate = true;
         }
         if (!fluidTank.isEmpty()) {
             fluidTank.setStack(FluidStack.EMPTY);
-            sendUpdate = true;
         }
         if (!gasTank.isEmpty()) {
             gasTank.setEmpty();
-            sendUpdate = true;
         }
         if (!infusionTank.isEmpty()) {
             infusionTank.setEmpty();
-            sendUpdate = true;
         }
         if (!pigmentTank.isEmpty()) {
             pigmentTank.setEmpty();
-            sendUpdate = true;
         }
         if (!slurryTank.isEmpty()) {
             slurryTank.setEmpty();
-            sendUpdate = true;
         }
         if (!energyContainer.isEmpty()) {
             energyContainer.setEmpty();
-            sendUpdate = true;
         }
-
-        return sendUpdate;
     }
 
     @Override

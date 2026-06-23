@@ -2,7 +2,6 @@ package com.github.mochi7054.trashcube.inventory;
 
 import com.github.mochi7054.trashcube.block.entity.TrashCubeBlockEntity;
 import mekanism.common.inventory.container.tile.MekanismTileContainer;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 
 public class TrashCubeMenu extends MekanismTileContainer<TrashCubeBlockEntity> {
@@ -11,9 +10,6 @@ public class TrashCubeMenu extends MekanismTileContainer<TrashCubeBlockEntity> {
         super(tile.getContainerType(), containerId, inv, tile);
     }
 
-    public TrashCubeMenu(int containerId, Inventory inv, FriendlyByteBuf buf) {
-        this(containerId, inv, getTileFromBuf(buf, TrashCubeBlockEntity.class));
-    }
 
     @Override
     protected void addInventorySlots(Inventory playerInventory) {
