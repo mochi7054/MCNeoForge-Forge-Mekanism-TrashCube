@@ -32,9 +32,11 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+
 public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implements MenuProvider {
 
-    private BasicInventorySlot trashSlot;
+    private BasicInventorySlot[] trashSlots;
     private BasicFluidTank fluidTank;
     private IChemicalTank chemicalTank;
     private MachineEnergyContainer<TrashCubeBlockEntity> energyContainer;
@@ -46,14 +48,14 @@ public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implemen
 
         // Setup side configs for Item, Fluid, Chemical, Energy
         // setupInputConfig only registers INPUT and NONE states
-        configComponent.setupInputConfig(TransmissionType.ITEM, trashSlot);
+        configComponent.setupInputConfig(TransmissionType.ITEM, Arrays.asList(trashSlots));
         configComponent.setupInputConfig(TransmissionType.FLUID, fluidTank);
         configComponent.setupInputConfig(TransmissionType.CHEMICAL, chemicalTank);
         configComponent.setupInputConfig(TransmissionType.ENERGY, energyContainer);
     }
 
-    public BasicInventorySlot getTrashSlot() {
-        return trashSlot;
+    public BasicInventorySlot[] getTrashSlots() {
+        return trashSlots;
     }
 
     public BasicFluidTank getFluidTank() {
@@ -72,9 +74,15 @@ public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implemen
     @Override
     protected IInventorySlotHolder getInitialInventory(IContentsListener listener) {
         InventorySlotHelper builder = InventorySlotHelper.forSideWithConfig(this);
-        // Place the trash slot at x=80, y=35 (center of standard 176x166 GUI)
-        trashSlot = BasicInventorySlot.at(listener, 80, 35);
-        builder.addSlot(trashSlot);
+        // Place the 3x3 slots grid starting at x=62, y=17 (centered in standard 176x166 GUI)
+        trashSlots = new BasicInventorySlot[9];
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                int index = row * 3 + col;
+                trashSlots[index] = BasicInventorySlot.at(listener, 62 + col * 18, 17 + row * 18);
+                builder.addSlot(trashSlots[index]);
+            }
+        }
         return builder.build();
     }
 
@@ -106,23 +114,49 @@ public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implemen
     }
 
     @Override
+    public void onContentsChanged() {
+        super.onContentsChanged();
+
+        if (trashSlots != null) {
+            for (BasicInventorySlot slot : trashSlots) {
+                if (slot != null && !slot.isEmpty()) {
+                    slot.setStack(ItemStack.EMPTY);
+                }
+            }
+        }
+        if (fluidTank != null && !fluidTank.isEmpty()) {
+            fluidTank.setEmpty();
+        }
+        if (chemicalTank != null && !chemicalTank.isEmpty()) {
+            chemicalTank.setEmpty();
+        }
+        if (energyContainer != null && !energyContainer.isEmpty()) {
+            energyContainer.setEmpty();
+        }
+    }
+
+    @Override
     protected boolean onUpdateServer() {
         boolean sendUpdate = super.onUpdateServer();
 
         // Instantly delete any contents inside the slot and tanks
-        if (!trashSlot.isEmpty()) {
-            trashSlot.setStack(ItemStack.EMPTY);
-            sendUpdate = true;
+        if (trashSlots != null) {
+            for (BasicInventorySlot slot : trashSlots) {
+                if (slot != null && !slot.isEmpty()) {
+                    slot.setStack(ItemStack.EMPTY);
+                    sendUpdate = true;
+                }
+            }
         }
-        if (!fluidTank.isEmpty()) {
+        if (fluidTank != null && !fluidTank.isEmpty()) {
             fluidTank.setStack(FluidStack.EMPTY);
             sendUpdate = true;
         }
-        if (!chemicalTank.isEmpty()) {
+        if (chemicalTank != null && !chemicalTank.isEmpty()) {
             chemicalTank.setEmpty();
             sendUpdate = true;
         }
-        if (!energyContainer.isEmpty()) {
+        if (energyContainer != null && !energyContainer.isEmpty()) {
             energyContainer.setEmpty();
             sendUpdate = true;
         }
