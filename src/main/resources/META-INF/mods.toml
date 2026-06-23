@@ -1,0 +1,33 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MIT"
+
+[[mods]]
+modId="mekanismtrashcube"
+version="1.0.0"
+displayName="Mekanism TrashCube"
+authors="mochi7054"
+description='''
+A Mekanism addon that adds a Trash Cube block to void items, fluids, and chemicals.
+'''
+
+[[dependencies.mekanismtrashcube]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.mekanismtrashcube]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1,1.21)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.mekanismtrashcube]]
+    modId="mekanism"
+    mandatory=true
+    versionRange="[10.4.16,)"
+    ordering="NONE"
+    side="BOTH"
