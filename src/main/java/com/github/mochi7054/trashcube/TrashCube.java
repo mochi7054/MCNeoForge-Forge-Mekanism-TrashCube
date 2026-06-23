@@ -5,15 +5,12 @@ import com.github.mochi7054.trashcube.block.entity.TrashCubeBlockEntity;
 import com.github.mochi7054.trashcube.inventory.TrashCubeMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -51,36 +48,11 @@ public class TrashCube {
                 output.accept(BLOCK.asItem());
             }).build());
 
-    public TrashCube(IEventBus modEventBus, ModContainer modContainer) {
+    public TrashCube(IEventBus modEventBus) {
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
         BLOCK_ENTITIES.register(modEventBus);
         MENU_TYPES.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
-
-        modEventBus.addListener(this::registerCapabilities);
-    }
-
-    private void registerCapabilities(RegisterCapabilitiesEvent event) {
-        event.registerBlockEntity(
-            net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK,
-            TILE.get(),
-            (be, side) -> com.github.mochi7054.trashcube.inventory.VoidItemHandler.INSTANCE
-        );
-        event.registerBlockEntity(
-            net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.BLOCK,
-            TILE.get(),
-            (be, side) -> com.github.mochi7054.trashcube.fluid.VoidFluidHandler.INSTANCE
-        );
-        event.registerBlockEntity(
-            mekanism.common.capabilities.Capabilities.CHEMICAL.block(),
-            TILE.get(),
-            (be, side) -> new com.github.mochi7054.trashcube.chemical.VoidChemicalHandler()
-        );
-        event.registerBlockEntity(
-            mekanism.common.capabilities.Capabilities.STRICT_ENERGY.block(),
-            TILE.get(),
-            (be, side) -> com.github.mochi7054.trashcube.energy.VoidEnergyHandler.INSTANCE
-        );
     }
 }
