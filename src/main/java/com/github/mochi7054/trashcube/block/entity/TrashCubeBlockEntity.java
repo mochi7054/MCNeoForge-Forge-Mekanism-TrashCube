@@ -1,14 +1,7 @@
 package com.github.mochi7054.trashcube.block.entity;
 
 import com.github.mochi7054.trashcube.TrashCube;
-import com.github.mochi7054.trashcube.chemical.VoidGasHandler;
-import com.github.mochi7054.trashcube.chemical.VoidInfusionHandler;
-import com.github.mochi7054.trashcube.chemical.VoidPigmentHandler;
-import com.github.mochi7054.trashcube.chemical.VoidSlurryHandler;
-import com.github.mochi7054.trashcube.energy.VoidEnergyHandler;
-import com.github.mochi7054.trashcube.fluid.VoidFluidHandler;
 import com.github.mochi7054.trashcube.inventory.TrashCubeMenu;
-import com.github.mochi7054.trashcube.inventory.VoidItemHandler;
 import mekanism.api.IContentsListener;
 import mekanism.api.chemical.ChemicalTankBuilder;
 import mekanism.api.chemical.gas.IGasTank;
@@ -53,7 +46,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -61,23 +53,17 @@ import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+
 public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implements MenuProvider {
 
-    private BasicInventorySlot trashSlot;
+    private BasicInventorySlot[] trashSlots;
     private BasicFluidTank fluidTank;
     private IGasTank gasTank;
     private IInfusionTank infusionTank;
     private IPigmentTank pigmentTank;
     private ISlurryTank slurryTank;
     private MachineEnergyContainer<TrashCubeBlockEntity> energyContainer;
-
-    private final LazyOptional<IItemHandler> itemCapability = LazyOptional.of(() -> VoidItemHandler.INSTANCE);
-    private final LazyOptional<IFluidHandler> fluidCapability = LazyOptional.of(() -> VoidFluidHandler.INSTANCE);
-    private final LazyOptional<IStrictEnergyHandler> energyCapability = LazyOptional.of(() -> VoidEnergyHandler.INSTANCE);
-    private final LazyOptional<IGasHandler> gasCapability = LazyOptional.of(() -> VoidGasHandler.INSTANCE);
-    private final LazyOptional<IInfusionHandler> infusionCapability = LazyOptional.of(() -> VoidInfusionHandler.INSTANCE);
-    private final LazyOptional<IPigmentHandler> pigmentCapability = LazyOptional.of(() -> VoidPigmentHandler.INSTANCE);
-    private final LazyOptional<ISlurryHandler> slurryCapability = LazyOptional.of(() -> VoidSlurryHandler.INSTANCE);
 
     public TrashCubeBlockEntity(BlockPos pos, BlockState state) {
         super(TrashCube.BLOCK, pos, state);
@@ -93,7 +79,7 @@ public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implemen
         );
         ejectorComponent = new TileComponentEjector(this);
 
-        configComponent.setupInputConfig(TransmissionType.ITEM, trashSlot);
+        configComponent.setupInputConfig(TransmissionType.ITEM, Arrays.asList(trashSlots));
         configComponent.setupInputConfig(TransmissionType.FLUID, fluidTank);
         configComponent.setupInputConfig(TransmissionType.GAS, gasTank);
         configComponent.setupInputConfig(TransmissionType.INFUSION, infusionTank);
@@ -102,8 +88,8 @@ public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implemen
         configComponent.setupInputConfig(TransmissionType.ENERGY, energyContainer);
     }
 
-    public BasicInventorySlot getTrashSlot() {
-        return trashSlot;
+    public BasicInventorySlot[] getTrashSlots() {
+        return trashSlots;
     }
 
     public BasicFluidTank getFluidTank() {
@@ -134,8 +120,14 @@ public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implemen
     @Override
     protected IInventorySlotHolder getInitialInventory(IContentsListener listener) {
         InventorySlotHelper builder = InventorySlotHelper.forSideWithConfig(this::getDirection, this::getConfig);
-        trashSlot = BasicInventorySlot.at(listener, 80, 35);
-        builder.addSlot(trashSlot);
+        trashSlots = new BasicInventorySlot[9];
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                int index = row * 3 + col;
+                trashSlots[index] = BasicInventorySlot.at(listener, 62 + col * 18, 17 + row * 18);
+                builder.addSlot(trashSlots[index]);
+            }
+        }
         return builder.build();
     }
 
@@ -194,28 +186,71 @@ public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implemen
     }
 
     @Override
+    public void onContentsChanged() {
+        super.onContentsChanged();
+
+        boolean changed = false;
+        if (trashSlots != null) {
+            for (BasicInventorySlot slot : trashSlots) {
+                if (slot != null && !slot.isEmpty()) {
+                    slot.setStack(ItemStack.EMPTY);
+                    changed = true;
+                }
+            }
+        }
+        if (fluidTank != null && !fluidTank.isEmpty()) {
+            fluidTank.setEmpty();
+            changed = true;
+        }
+        if (gasTank != null && !gasTank.isEmpty()) {
+            gasTank.setEmpty();
+            changed = true;
+        }
+        if (infusionTank != null && !infusionTank.isEmpty()) {
+            infusionTank.setEmpty();
+            changed = true;
+        }
+        if (pigmentTank != null && !pigmentTank.isEmpty()) {
+            pigmentTank.setEmpty();
+            changed = true;
+        }
+        if (slurryTank != null && !slurryTank.isEmpty()) {
+            slurryTank.setEmpty();
+            changed = true;
+        }
+        if (energyContainer != null && !energyContainer.isEmpty()) {
+            energyContainer.setEmpty();
+            changed = true;
+        }
+    }
+
+    @Override
     protected void onUpdateServer() {
         super.onUpdateServer();
 
-        if (!trashSlot.isEmpty()) {
-            trashSlot.setStack(ItemStack.EMPTY);
+        if (trashSlots != null) {
+            for (BasicInventorySlot slot : trashSlots) {
+                if (slot != null && !slot.isEmpty()) {
+                    slot.setStack(ItemStack.EMPTY);
+                }
+            }
         }
-        if (!fluidTank.isEmpty()) {
-            fluidTank.setStack(FluidStack.EMPTY);
+        if (fluidTank != null && !fluidTank.isEmpty()) {
+            fluidTank.setEmpty();
         }
-        if (!gasTank.isEmpty()) {
+        if (gasTank != null && !gasTank.isEmpty()) {
             gasTank.setEmpty();
         }
-        if (!infusionTank.isEmpty()) {
+        if (infusionTank != null && !infusionTank.isEmpty()) {
             infusionTank.setEmpty();
         }
-        if (!pigmentTank.isEmpty()) {
+        if (pigmentTank != null && !pigmentTank.isEmpty()) {
             pigmentTank.setEmpty();
         }
-        if (!slurryTank.isEmpty()) {
+        if (slurryTank != null && !slurryTank.isEmpty()) {
             slurryTank.setEmpty();
         }
-        if (!energyContainer.isEmpty()) {
+        if (energyContainer != null && !energyContainer.isEmpty()) {
             energyContainer.setEmpty();
         }
     }
@@ -234,43 +269,5 @@ public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implemen
     public mekanism.common.registration.impl.ContainerTypeRegistryObject<TrashCubeMenu> getContainerType() {
         return TrashCube.CONTAINER_TYPE;
     }
-
-    @NotNull
-    @Override
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction side) {
-        if (capability == ForgeCapabilities.ITEM_HANDLER) {
-            return itemCapability.cast();
-        }
-        if (capability == ForgeCapabilities.FLUID_HANDLER) {
-            return fluidCapability.cast();
-        }
-        if (capability == mekanism.common.capabilities.Capabilities.STRICT_ENERGY) {
-            return energyCapability.cast();
-        }
-        if (capability == mekanism.common.capabilities.Capabilities.GAS_HANDLER) {
-            return gasCapability.cast();
-        }
-        if (capability == mekanism.common.capabilities.Capabilities.INFUSION_HANDLER) {
-            return infusionCapability.cast();
-        }
-        if (capability == mekanism.common.capabilities.Capabilities.PIGMENT_HANDLER) {
-            return pigmentCapability.cast();
-        }
-        if (capability == mekanism.common.capabilities.Capabilities.SLURRY_HANDLER) {
-            return slurryCapability.cast();
-        }
-        return super.getCapability(capability, side);
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        itemCapability.invalidate();
-        fluidCapability.invalidate();
-        energyCapability.invalidate();
-        gasCapability.invalidate();
-        infusionCapability.invalidate();
-        pigmentCapability.invalidate();
-        slurryCapability.invalidate();
-    }
 }
+
