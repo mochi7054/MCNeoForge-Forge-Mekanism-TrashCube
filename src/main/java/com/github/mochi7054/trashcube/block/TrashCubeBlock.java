@@ -5,6 +5,7 @@ import com.github.mochi7054.trashcube.block.entity.TrashCubeBlockEntity;
 import mekanism.api.Upgrade;
 import mekanism.api.text.EnumColor;
 import mekanism.api.text.ILangEntry;
+import mekanism.common.block.interfaces.IHasDescription;
 import mekanism.common.block.prefab.BlockTile;
 import mekanism.common.content.blocktype.BlockTypeTile;
 import mekanism.api.math.FloatingLong;
@@ -14,10 +15,32 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import java.util.Collections;
 
-public class TrashCubeBlock extends BlockTile<TrashCubeBlockEntity, BlockTypeTile<TrashCubeBlockEntity>> {
+public class TrashCubeBlock extends BlockTile<TrashCubeBlockEntity, BlockTypeTile<TrashCubeBlockEntity>> implements IHasDescription {
 
     public TrashCubeBlock(BlockBehaviour.Properties properties) {
         super(createBlockType(), properties);
+    }
+
+    @Override
+    public ILangEntry getDescription() {
+        return new ILangEntry() {
+            @Override
+            public String getTranslationKey() {
+                return "description.mekanismtrashcube.trash_cube";
+            }
+            @Override
+            public MutableComponent translate(Object... args) {
+                return Component.translatable(getTranslationKey(), args);
+            }
+            @Override
+            public MutableComponent translateColored(EnumColor color, Object... args) {
+                return translate(args).withStyle(style -> style.withColor(color.getColor()));
+            }
+            @Override
+            public MutableComponent translateColored(TextColor color, Object... args) {
+                return translate(args).withStyle(style -> style.withColor(color));
+            }
+        };
     }
 
     private static BlockTypeTile<TrashCubeBlockEntity> createBlockType() {

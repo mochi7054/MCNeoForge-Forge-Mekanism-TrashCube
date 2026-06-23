@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "OIO",
+    "ICI",
+    "OIO"
+  ],
+  "key": {
+    "C": {
+      "item": "mekanism:steel_casing"
+    },
+    "I": {
+      "tag": "forge:ingots/steel"
+    },
+    "O": {
+      "item": "minecraft:obsidian"
+    }
+  },
+  "result": {
+    "item": "mekanismtrashcube:trash_cube"
+  }
+}

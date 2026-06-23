@@ -26,10 +26,10 @@ public class TrashCube {
     public static final mekanism.common.registration.impl.ContainerTypeDeferredRegister MENU_TYPES = new mekanism.common.registration.impl.ContainerTypeDeferredRegister(MODID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
-    public static final mekanism.common.registration.impl.BlockRegistryObject<TrashCubeBlock, BlockItem> BLOCK =
+    public static final mekanism.common.registration.impl.BlockRegistryObject<TrashCubeBlock, mekanism.common.item.block.ItemBlockTooltip> BLOCK =
             BLOCKS.register("trash_cube",
                     () -> new TrashCubeBlock(BlockBehaviour.Properties.of().strength(3.5F).noOcclusion()),
-                    block -> new BlockItem(block, new Item.Properties()));
+                    block -> new mekanism.common.item.block.ItemBlockTooltip(block, new Item.Properties()));
 
     public static final mekanism.common.registration.impl.TileEntityTypeRegistryObject<TrashCubeBlockEntity> TILE =
             BLOCK_ENTITIES.register(BLOCK, TrashCubeBlockEntity::new,
