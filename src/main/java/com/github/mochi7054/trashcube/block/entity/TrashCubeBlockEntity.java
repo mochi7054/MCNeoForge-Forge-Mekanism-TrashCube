@@ -79,7 +79,12 @@ public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implemen
         );
         ejectorComponent = new TileComponentEjector(this);
 
-        configComponent.setupInputConfig(TransmissionType.ITEM, Arrays.asList(trashSlots));
+        mekanism.common.tile.component.config.ConfigInfo itemConfig = configComponent.getConfig(TransmissionType.ITEM);
+        if (itemConfig != null) {
+            itemConfig.addSlotInfo(mekanism.common.tile.component.config.DataType.INPUT, TileComponentConfig.createInfo(TransmissionType.ITEM, true, false, Arrays.asList(trashSlots)));
+            itemConfig.fill(mekanism.common.tile.component.config.DataType.INPUT);
+            itemConfig.setCanEject(false);
+        }
         configComponent.setupInputConfig(TransmissionType.FLUID, fluidTank);
         configComponent.setupInputConfig(TransmissionType.GAS, gasTank);
         configComponent.setupInputConfig(TransmissionType.INFUSION, infusionTank);
