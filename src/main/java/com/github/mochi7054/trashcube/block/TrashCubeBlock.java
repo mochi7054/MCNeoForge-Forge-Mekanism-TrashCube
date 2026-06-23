@@ -5,12 +5,24 @@ import com.github.mochi7054.trashcube.block.entity.TrashCubeBlockEntity;
 import mekanism.common.block.prefab.BlockTile;
 import mekanism.common.content.blocktype.BlockTypeTile;
 import mekanism.common.lib.transmitter.TransmissionType;
+import mekanism.common.block.interfaces.IHasDescription;
+import mekanism.api.text.ILangEntry;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
-public class TrashCubeBlock extends BlockTile<TrashCubeBlockEntity, BlockTypeTile<TrashCubeBlockEntity>> {
+public class TrashCubeBlock extends BlockTile<TrashCubeBlockEntity, BlockTypeTile<TrashCubeBlockEntity>> implements IHasDescription {
 
     public TrashCubeBlock(BlockBehaviour.Properties properties) {
         super(createBlockType(), properties);
+    }
+
+    @Override
+    public ILangEntry getDescription() {
+        return new ILangEntry() {
+            @Override
+            public String getTranslationKey() {
+                return "description.mekanismtrashcube.trash_cube";
+            }
+        };
     }
 
     private static BlockTypeTile<TrashCubeBlockEntity> createBlockType() {

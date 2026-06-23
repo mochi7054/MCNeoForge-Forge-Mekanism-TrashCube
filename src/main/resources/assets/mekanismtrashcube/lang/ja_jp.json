@@ -1,4 +1,6 @@
 {
   "block.mekanismtrashcube.trash_cube": "トラッシュキューブ",
-  "container.mekanismtrashcube.trash_cube": "トラッシュキューブ"
+  "container.mekanismtrashcube.trash_cube": "トラッシュキューブ",
+  "itemGroup.mekanismtrashcube": "Mekanism: TrashCube",
+  "description.mekanismtrashcube.trash_cube": "搬入されたアイテム、液体、気体、エネルギーを瞬時に消滅させるティアなしのブロック。"
 }
