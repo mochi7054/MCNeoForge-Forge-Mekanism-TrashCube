@@ -41,6 +41,7 @@ import mekanism.common.capabilities.holder.slot.InventorySlotHelper;
 import mekanism.common.inventory.slot.BasicInventorySlot;
 import mekanism.common.lib.transmitter.TransmissionType;
 import mekanism.common.tile.component.TileComponentConfig;
+import mekanism.common.tile.component.TileComponentEjector;
 import mekanism.common.tile.prefab.TileEntityConfigurableMachine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -90,6 +91,7 @@ public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implemen
             TransmissionType.SLURRY,
             TransmissionType.ENERGY
         );
+        ejectorComponent = new TileComponentEjector(this);
 
         configComponent.setupInputConfig(TransmissionType.ITEM, trashSlot);
         configComponent.setupInputConfig(TransmissionType.FLUID, fluidTank);
