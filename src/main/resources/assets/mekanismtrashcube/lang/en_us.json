@@ -4,6 +4,7 @@
   "itemGroup.mekanismtrashcube": "Mekanism: TrashCube",
   "description.mekanismtrashcube.trash_cube": "A tierless block used to instantly void inserted items, fluids, gases, chemicals, and energy.",
   "gui.mekanismtrashcube.throw_here": "Throw it here!",
+  "advancements.mekanismtrashcube.root.description": "Mekanism: TrashCube Advancements",
   "advancements.mekanismtrashcube.trash_cube.title": "Trash Cubed",
   "advancements.mekanismtrashcube.trash_cube.description": "Obtain a Trash Cube"
 }

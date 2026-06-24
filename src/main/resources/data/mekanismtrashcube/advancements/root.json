@@ -1,19 +1,19 @@
 {
-  "parent": "mekanismtrashcube:root",
   "display": {
     "icon": {
       "id": "mekanismtrashcube:trash_cube"
     },
     "title": {
-      "translate": "advancements.mekanismtrashcube.trash_cube.title"
+      "translate": "itemGroup.mekanismtrashcube"
     },
     "description": {
-      "translate": "advancements.mekanismtrashcube.trash_cube.description"
+      "translate": "advancements.mekanismtrashcube.root.description"
     },
-    "frame": "challenge",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
   },
   "criteria": {
     "has_trash_cube": {
