@@ -29,6 +29,12 @@ public class TrashCubeScreen extends GuiConfigurableTile<TrashCubeBlockEntity, T
         Component text = Component.translatable("gui.mekanismtrashcube.throw_here");
         int textWidth = this.font.width(text);
         int x = (this.imageWidth - textWidth) / 2;
+        
+        Component face = Component.literal("><");
+        int faceWidth = this.font.width(face);
+        int faceX = (this.imageWidth - faceWidth) / 2;
+        
+        guiGraphics.drawString(this.font, face, faceX, 14, 0x404040, false);
         guiGraphics.drawString(this.font, text, x, 24, 0x404040, false);
     }
 }

@@ -3,5 +3,7 @@
   "container.mekanismtrashcube.trash_cube": "ごみキューブ",
   "itemGroup.mekanismtrashcube": "Mekanism: TrashCube",
   "description.mekanismtrashcube.trash_cube": "搬入されたアイテム、液体、気体、エネルギーを瞬時に消滅させるごみキューブ",
-  "gui.mekanismtrashcube.throw_here": "ここに投げて！"
+  "gui.mekanismtrashcube.throw_here": "ここに投げて！",
+  "advancements.mekanismtrashcube.trash_cube.title": "ごみの3乗",
+  "advancements.mekanismtrashcube.trash_cube.description": "ごみキューブを取得する"
 }

@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "item": "mekanismtrashcube:trash_cube"
+    },
+    "title": {
+      "translate": "advancements.mekanismtrashcube.trash_cube.title"
+    },
+    "description": {
+      "translate": "advancements.mekanismtrashcube.trash_cube.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
+  },
+  "criteria": {
+    "has_trash_cube": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "mekanismtrashcube:trash_cube"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_trash_cube"
+    ]
+  ]
+}
