@@ -97,15 +97,9 @@ public class TrashCubeBlockEntity extends TileEntityMekanism implements MenuProv
             initConfigComponent();
         }
         InventorySlotHelper builder = InventorySlotHelper.forSideWithConfig(this);
-        // Place the 3x3 slots grid starting at x=62, y=17 (centered in standard 176x166 GUI)
-        trashSlots = new BasicInventorySlot[9];
-        for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < 3; col++) {
-                int index = row * 3 + col;
-                trashSlots[index] = BasicInventorySlot.at(listener, 62 + col * 18, 17 + row * 18);
-                builder.addSlot(trashSlots[index]);
-            }
-        }
+        trashSlots = new BasicInventorySlot[1];
+        trashSlots[0] = new TrashInventorySlot(listener, 80, 35);
+        builder.addSlot(trashSlots[0]);
         return builder.build();
     }
 
@@ -235,6 +229,24 @@ public class TrashCubeBlockEntity extends TileEntityMekanism implements MenuProv
         }
         if (ejectorComponent != null) {
             ejectorComponent.read(tag, provider);
+        }
+    }
+
+    public static class TrashInventorySlot extends BasicInventorySlot {
+        public TrashInventorySlot(IContentsListener listener, int x, int y) {
+            super(
+                (java.util.function.Predicate<ItemStack>) stack -> true,
+                (java.util.function.Predicate<ItemStack>) stack -> true,
+                (java.util.function.Predicate<ItemStack>) stack -> true,
+                listener,
+                x,
+                y
+            );
+        }
+
+        @Override
+        public int getLimit(ItemStack stack) {
+            return Integer.MAX_VALUE;
         }
     }
 }
