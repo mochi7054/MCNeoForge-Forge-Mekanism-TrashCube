@@ -6,6 +6,7 @@ license="MIT"
 modId="mekanismtrashcube"
 version="1.0.0"
 displayName="Mekanism TrashCube"
+logoFile="logo.png"
 authors="mochi7054"
 description='''
 A Mekanism addon that adds a Trash Cube block to void items, fluids, and chemicals.
