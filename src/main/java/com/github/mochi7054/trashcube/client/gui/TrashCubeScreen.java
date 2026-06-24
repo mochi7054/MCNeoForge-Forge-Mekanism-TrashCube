@@ -32,7 +32,7 @@ public class TrashCubeScreen extends GuiConfigurableTile<TrashCubeBlockEntity, T
         int textWidth = this.font.width(text);
         int x = (this.imageWidth - textWidth) / 2;
         
-        Component face = Component.literal("><");
+        Component face = Component.literal("> <");
         int faceWidth = this.font.width(face);
         int faceX = (this.imageWidth - faceWidth) / 2;
         
