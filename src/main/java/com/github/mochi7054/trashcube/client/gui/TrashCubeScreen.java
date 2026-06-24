@@ -22,4 +22,13 @@ public class TrashCubeScreen extends GuiConfigurableTile<TrashCubeBlockEntity, T
     protected void addGuiElements() {
         super.addGuiElements();
     }
+
+    @Override
+    protected void drawForegroundText(net.minecraft.client.gui.GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        super.drawForegroundText(guiGraphics, mouseX, mouseY);
+        Component text = Component.translatable("gui.mekanismtrashcube.throw_here");
+        int textWidth = this.font.width(text);
+        int x = (this.imageWidth - textWidth) / 2;
+        guiGraphics.drawString(this.font, text, x, 24, 0x404040, false);
+    }
 }
