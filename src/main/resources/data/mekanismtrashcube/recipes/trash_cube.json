@@ -1,19 +1,28 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "OIO",
-    "ICI",
-    "OIO"
+    "GTG",
+    "MCP",
+    "GUG"
   ],
   "key": {
+    "G": {
+      "item": "mekanism:ingot_refined_glowstone"
+    },
+    "T": {
+      "item": "mekanism:basic_logistical_transporter"
+    },
+    "M": {
+      "item": "mekanism:basic_mechanical_pipe"
+    },
     "C": {
       "item": "mekanism:steel_casing"
     },
-    "I": {
-      "tag": "forge:ingots/steel"
+    "P": {
+      "item": "mekanism:basic_pressurized_tube"
     },
-    "O": {
-      "item": "minecraft:obsidian"
+    "U": {
+      "item": "mekanism:basic_universal_cable"
     }
   },
   "result": {

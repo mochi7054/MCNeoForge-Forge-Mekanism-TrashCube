@@ -1,7 +1,7 @@
 {
-  "block.mekanismtrashcube.trash_cube": "トラッシュキューブ",
-  "container.mekanismtrashcube.trash_cube": "トラッシュキューブ",
+  "block.mekanismtrashcube.trash_cube": "ごみキューブ",
+  "container.mekanismtrashcube.trash_cube": "ごみキューブ",
   "itemGroup.mekanismtrashcube": "Mekanism: TrashCube",
-  "description.mekanismtrashcube.trash_cube": "搬入されたアイテム、液体、気体、エネルギーを瞬時に消滅させるティアなしのブロック。",
+  "description.mekanismtrashcube.trash_cube": "搬入されたアイテム、液体、気体、エネルギーを瞬時に消滅させるごみキューブ",
   "gui.mekanismtrashcube.throw_here": "ここに投げて！"
 }
