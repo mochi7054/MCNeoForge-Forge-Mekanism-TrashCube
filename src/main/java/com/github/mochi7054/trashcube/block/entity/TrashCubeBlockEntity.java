@@ -32,10 +32,8 @@ import mekanism.common.capabilities.holder.fluid.IFluidTankHolder;
 import mekanism.common.capabilities.holder.slot.IInventorySlotHolder;
 import mekanism.common.capabilities.holder.slot.InventorySlotHelper;
 import mekanism.common.inventory.slot.BasicInventorySlot;
-import mekanism.common.lib.transmitter.TransmissionType;
-import mekanism.common.tile.component.TileComponentConfig;
-import mekanism.common.tile.component.TileComponentEjector;
-import mekanism.common.tile.prefab.TileEntityConfigurableMachine;
+import mekanism.common.tile.base.TileEntityMekanism;
+import mekanism.common.tile.interfaces.ISideConfiguration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -55,7 +53,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
-public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implements MenuProvider {
+public class TrashCubeBlockEntity extends TileEntityMekanism implements MenuProvider, ISideConfiguration {
+
+    public mekanism.common.tile.component.TileComponentConfig configComponent;
+    public mekanism.common.tile.component.TileComponentEjector ejectorComponent;
 
     private BasicInventorySlot[] trashSlots;
     private BasicFluidTank fluidTank;
@@ -65,32 +66,38 @@ public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implemen
     private ISlurryTank slurryTank;
     private MachineEnergyContainer<TrashCubeBlockEntity> energyContainer;
 
+    private void initConfigComponent() {
+        configComponent = new mekanism.common.tile.component.TileComponentConfig(this,
+            mekanism.common.lib.transmitter.TransmissionType.ITEM,
+            mekanism.common.lib.transmitter.TransmissionType.FLUID,
+            mekanism.common.lib.transmitter.TransmissionType.GAS,
+            mekanism.common.lib.transmitter.TransmissionType.INFUSION,
+            mekanism.common.lib.transmitter.TransmissionType.PIGMENT,
+            mekanism.common.lib.transmitter.TransmissionType.SLURRY,
+            mekanism.common.lib.transmitter.TransmissionType.ENERGY
+        );
+    }
+
     public TrashCubeBlockEntity(BlockPos pos, BlockState state) {
         super(TrashCube.BLOCK, pos, state);
 
-        configComponent = new TileComponentConfig(this,
-            TransmissionType.ITEM,
-            TransmissionType.FLUID,
-            TransmissionType.GAS,
-            TransmissionType.INFUSION,
-            TransmissionType.PIGMENT,
-            TransmissionType.SLURRY,
-            TransmissionType.ENERGY
-        );
-        ejectorComponent = new TileComponentEjector(this);
+        if (configComponent == null) {
+            initConfigComponent();
+        }
+        ejectorComponent = new mekanism.common.tile.component.TileComponentEjector(this);
 
-        mekanism.common.tile.component.config.ConfigInfo itemConfig = configComponent.getConfig(TransmissionType.ITEM);
+        mekanism.common.tile.component.config.ConfigInfo itemConfig = configComponent.getConfig(mekanism.common.lib.transmitter.TransmissionType.ITEM);
         if (itemConfig != null) {
-            itemConfig.addSlotInfo(mekanism.common.tile.component.config.DataType.INPUT, TileComponentConfig.createInfo(TransmissionType.ITEM, true, false, Arrays.asList(trashSlots)));
+            itemConfig.addSlotInfo(mekanism.common.tile.component.config.DataType.INPUT, mekanism.common.tile.component.TileComponentConfig.createInfo(mekanism.common.lib.transmitter.TransmissionType.ITEM, true, false, Arrays.asList(trashSlots)));
             itemConfig.fill(mekanism.common.tile.component.config.DataType.INPUT);
             itemConfig.setCanEject(false);
         }
-        configComponent.setupInputConfig(TransmissionType.FLUID, fluidTank);
-        configComponent.setupInputConfig(TransmissionType.GAS, gasTank);
-        configComponent.setupInputConfig(TransmissionType.INFUSION, infusionTank);
-        configComponent.setupInputConfig(TransmissionType.PIGMENT, pigmentTank);
-        configComponent.setupInputConfig(TransmissionType.SLURRY, slurryTank);
-        configComponent.setupInputConfig(TransmissionType.ENERGY, energyContainer);
+        configComponent.setupInputConfig(mekanism.common.lib.transmitter.TransmissionType.FLUID, fluidTank);
+        configComponent.setupInputConfig(mekanism.common.lib.transmitter.TransmissionType.GAS, gasTank);
+        configComponent.setupInputConfig(mekanism.common.lib.transmitter.TransmissionType.INFUSION, infusionTank);
+        configComponent.setupInputConfig(mekanism.common.lib.transmitter.TransmissionType.PIGMENT, pigmentTank);
+        configComponent.setupInputConfig(mekanism.common.lib.transmitter.TransmissionType.SLURRY, slurryTank);
+        configComponent.setupInputConfig(mekanism.common.lib.transmitter.TransmissionType.ENERGY, energyContainer);
     }
 
     public BasicInventorySlot[] getTrashSlots() {
@@ -124,6 +131,9 @@ public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implemen
     @NotNull
     @Override
     protected IInventorySlotHolder getInitialInventory(IContentsListener listener) {
+        if (configComponent == null) {
+            initConfigComponent();
+        }
         InventorySlotHelper builder = InventorySlotHelper.forSideWithConfig(this::getDirection, this::getConfig);
         trashSlots = new BasicInventorySlot[9];
         for (int row = 0; row < 3; row++) {
@@ -232,6 +242,9 @@ public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implemen
     @Override
     protected void onUpdateServer() {
         super.onUpdateServer();
+        if (ejectorComponent != null) {
+            ejectorComponent.tickServer();
+        }
 
         if (trashSlots != null) {
             for (BasicInventorySlot slot : trashSlots) {
@@ -273,6 +286,39 @@ public class TrashCubeBlockEntity extends TileEntityConfigurableMachine implemen
 
     public mekanism.common.registration.impl.ContainerTypeRegistryObject<TrashCubeMenu> getContainerType() {
         return TrashCube.CONTAINER_TYPE;
+    }
+
+    @Override
+    public mekanism.common.tile.component.TileComponentConfig getConfig() {
+        return configComponent;
+    }
+
+    @Override
+    public mekanism.common.tile.component.TileComponentEjector getEjector() {
+        return ejectorComponent;
+    }
+
+    @Override
+    public net.minecraft.nbt.CompoundTag getConfigurationData(net.minecraft.world.entity.player.Player player) {
+        net.minecraft.nbt.CompoundTag tag = super.getConfigurationData(player);
+        if (configComponent != null) {
+            configComponent.write(tag);
+        }
+        if (ejectorComponent != null) {
+            ejectorComponent.write(tag);
+        }
+        return tag;
+    }
+
+    @Override
+    public void setConfigurationData(net.minecraft.world.entity.player.Player player, net.minecraft.nbt.CompoundTag tag) {
+        super.setConfigurationData(player, tag);
+        if (configComponent != null) {
+            configComponent.read(tag);
+        }
+        if (ejectorComponent != null) {
+            ejectorComponent.read(tag);
+        }
     }
 }
 
