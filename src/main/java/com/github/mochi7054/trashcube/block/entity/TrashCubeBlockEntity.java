@@ -38,6 +38,8 @@ import mekanism.api.Action;
 import mekanism.api.AutomationType;
 
 import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 
 public class TrashCubeBlockEntity extends TileEntityMekanism implements MenuProvider, ISideConfiguration {
 
@@ -243,9 +245,14 @@ public class TrashCubeBlockEntity extends TileEntityMekanism implements MenuProv
         }
     }
 
+    @Override
+    public Set<mekanism.api.Upgrade> getSupportedUpgrade() {
+        return Set.of(mekanism.api.Upgrade.FILTER);
+    }
+
     public boolean hasRadioactiveUpgrade() {
-        if (supportsUpgrades()) {
-            return getComponent().getUpgrades(com.github.mochi7054.trashcube.TrashCube.RADIOACTIVE_UPGRADE_TYPE) > 0;
+        if (supportsUpgrades() && getComponent() != null) {
+            return getComponent().getUpgrades(mekanism.api.Upgrade.FILTER) > 0;
         }
         return false;
     }
