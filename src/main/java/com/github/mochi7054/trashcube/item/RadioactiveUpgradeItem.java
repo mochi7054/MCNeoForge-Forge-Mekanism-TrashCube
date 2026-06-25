@@ -1,19 +1,17 @@
 package com.github.mochi7054.trashcube.item;
 
 import com.github.mochi7054.trashcube.TrashCube;
-import mekanism.api.Upgrade;
-import mekanism.common.item.interfaces.IUpgradeItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import mekanism.common.item.ItemUpgrade;
 
-public class RadioactiveUpgradeItem extends Item implements IUpgradeItem {
+public class RadioactiveUpgradeItem extends ItemUpgrade {
 
     public RadioactiveUpgradeItem(Properties properties) {
-        super(properties);
+        super(getUpgradeTypeForceLoad(), properties);
     }
 
-    @Override
-    public Upgrade getUpgradeType(ItemStack stack) {
+    private static mekanism.api.Upgrade getUpgradeTypeForceLoad() {
+        // Force load Upgrade class to trigger UpgradeMixin <clinit> injection
+        mekanism.api.Upgrade.values();
         return TrashCube.RADIOACTIVE_UPGRADE_TYPE;
     }
 }
