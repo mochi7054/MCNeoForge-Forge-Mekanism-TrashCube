@@ -70,7 +70,7 @@ public class TrashCubeBlock extends BlockTile<TrashCubeBlockEntity, BlockTypeTil
 
         blockType.add(
             new mekanism.common.block.attribute.AttributeEnergy(() -> FloatingLong.ZERO, () -> FloatingLong.MAX_VALUE),
-            new mekanism.common.block.attribute.AttributeUpgradeSupport(java.util.Set.of(Upgrade.ANCHOR)),
+            new mekanism.common.block.attribute.AttributeUpgradeSupport(java.util.Set.of(Upgrade.FILTER)),
             mekanism.common.block.attribute.Attributes.ACTIVE,
             mekanism.common.block.attribute.Attributes.REDSTONE,
             mekanism.common.block.attribute.Attributes.SECURITY,

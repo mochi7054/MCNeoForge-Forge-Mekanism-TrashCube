@@ -20,26 +20,39 @@ public abstract class TileComponentUpgradeMixin {
     @Final
     private TileEntityMekanism tile;
 
-    @Inject(method = "supports", at = @At("HEAD"), cancellable = true)
-    private void onSupports(Upgrade upgrade, CallbackInfoReturnable<Boolean> cir) {
-        if (upgrade != null && upgrade.name().equals("RADIOACTIVE")) {
-            if (tile instanceof TrashCubeBlockEntity) {
-                cir.setReturnValue(true);
-            } else {
-                cir.setReturnValue(false);
-            }
-        }
-    }
+    @Shadow
+    @Final
+    private java.util.Map<Upgrade, Integer> upgrades;
 
-    @Inject(method = "getSupportedTypes", at = @At("RETURN"), cancellable = true)
-    private void onGetSupportedTypes(CallbackInfoReturnable<Set<Upgrade>> cir) {
-        if (tile instanceof TrashCubeBlockEntity) {
-            Set<Upgrade> supported = cir.getReturnValue();
-            if (supported != null && !supported.contains(TrashCube.RADIOACTIVE_UPGRADE_TYPE)) {
-                Set<Upgrade> mutable = new java.util.HashSet<>(supported);
-                mutable.add(TrashCube.RADIOACTIVE_UPGRADE_TYPE);
-                cir.setReturnValue(java.util.Collections.unmodifiableSet(mutable));
+    @Shadow
+    @Final
+    private mekanism.common.inventory.slot.UpgradeInventorySlot upgradeOutputSlot;
+
+    @Shadow
+    public abstract int getUpgrades(Upgrade upgrade);
+
+    @org.spongepowered.asm.mixin.injection.Inject(method = "removeUpgrade", at = @At("HEAD"), cancellable = true)
+    private void onRemoveUpgrade(Upgrade upgrade, boolean removeAll, org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
+        if (upgrade == Upgrade.FILTER && tile instanceof TrashCubeBlockEntity) {
+            int installed = this.getUpgrades(upgrade);
+            if (installed > 0) {
+                int toRemove = removeAll ? installed : 1;
+                net.minecraft.world.item.ItemStack upgradeStack = new net.minecraft.world.item.ItemStack(TrashCube.RADIOACTIVE_UPGRADE.get(), toRemove);
+                net.minecraft.world.item.ItemStack simulatedRemainder = this.upgradeOutputSlot.insertItem(upgradeStack, mekanism.api.Action.SIMULATE, mekanism.api.AutomationType.INTERNAL);
+                if (simulatedRemainder.getCount() < toRemove) {
+                    toRemove -= simulatedRemainder.getCount();
+                    if (installed == toRemove) {
+                        this.upgrades.remove(upgrade);
+                    } else {
+                        this.upgrades.put(upgrade, installed - toRemove);
+                    }
+
+                    this.tile.recalculateUpgrades(upgrade);
+                    net.minecraft.world.item.ItemStack executeStack = new net.minecraft.world.item.ItemStack(TrashCube.RADIOACTIVE_UPGRADE.get(), toRemove);
+                    this.upgradeOutputSlot.insertItem(executeStack, mekanism.api.Action.EXECUTE, mekanism.api.AutomationType.INTERNAL);
+                }
             }
+            ci.cancel();
         }
     }
 }
