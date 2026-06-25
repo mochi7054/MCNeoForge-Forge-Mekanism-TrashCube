@@ -30,13 +30,13 @@ public class TrashCube {
 
     public static final mekanism.common.registration.impl.BlockRegistryObject<TrashCubeBlock, mekanism.common.item.block.ItemBlockTooltip> BLOCK =
             BLOCKS.register("trash_cube",
-                    () -> new TrashCubeBlock(BlockBehaviour.Properties.of().strength(3.5F).noOcclusion()),
+                    () -> new TrashCubeBlock(BlockBehaviour.Properties.of().strength(3.5F).requiresCorrectToolForDrops().noOcclusion()),
                     block -> new mekanism.common.item.block.ItemBlockTooltip(block, new Item.Properties()));
 
     public static Upgrade RADIOACTIVE_UPGRADE_TYPE;
 
     public static final mekanism.common.registration.impl.ItemRegistryObject<RadioactiveUpgradeItem> RADIOACTIVE_UPGRADE =
-            ITEMS.register("radioactive_upgrade", () -> new RadioactiveUpgradeItem(new Item.Properties().stacksTo(1)));
+            ITEMS.register("radioactive_upgrade", () -> new RadioactiveUpgradeItem(new Item.Properties().stacksTo(64)));
 
     public static final mekanism.common.registration.impl.TileEntityTypeRegistryObject<TrashCubeBlockEntity> TILE =
             BLOCK_ENTITIES.register(BLOCK, TrashCubeBlockEntity::new,
