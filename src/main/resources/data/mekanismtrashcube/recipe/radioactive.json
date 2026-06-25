@@ -1,22 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "gfg",
-    "ror",
-    "gfg"
+    " G ",
+    "PBP",
+    " G "
   ],
   "key": {
-    "g": {
-      "tag": "c:glass_blocks/cheap"
+    "G": {
+      "item": "minecraft:glass"
     },
-    "f": {
-      "tag": "mekanism:alloys/infused"
+    "P": {
+      "item": "mekanism:pellet_plutonium"
     },
-    "r": {
-      "item": "minecraft:redstone"
-    },
-    "o": {
-      "tag": "c:ingots/lead"
+    "B": {
+      "item": "mekanism:radioactive_waste_barrel"
     }
   },
   "result": {
