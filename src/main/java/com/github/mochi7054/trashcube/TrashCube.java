@@ -32,9 +32,11 @@ public class TrashCube {
                     () -> new TrashCubeBlock(BlockBehaviour.Properties.of().strength(3.5F).noOcclusion()),
                     mekanism.common.item.block.ItemBlockTooltip::new);
 
+    public static Upgrade RADIOACTIVE_UPGRADE_TYPE;
+
     public static final DeferredItem<RadioactiveUpgradeItem> RADIOACTIVE_UPGRADE =
             ITEMS.register("radioactive_upgrade",
-                    () -> new RadioactiveUpgradeItem(new Item.Properties().stacksTo(Upgrade.FILTER.getMax())));
+                    () -> new RadioactiveUpgradeItem(new Item.Properties().stacksTo(1)));
 
     public static final mekanism.common.registration.impl.TileEntityTypeRegistryObject<TrashCubeBlockEntity> TILE =
             BLOCK_ENTITIES.mekBuilder(BLOCK, TrashCubeBlockEntity::new)

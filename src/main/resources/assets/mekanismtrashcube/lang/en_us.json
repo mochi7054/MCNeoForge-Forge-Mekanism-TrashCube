@@ -7,5 +7,9 @@
   "advancements.mekanismtrashcube.root.description": "Mekanism: TrashCube",
   "advancements.mekanismtrashcube.trash_cube.title": "Trash Cubed",
   "advancements.mekanismtrashcube.trash_cube.description": "Obtain a Trash Cube",
-  "item.mekanismtrashcube.radioactive_upgrade": "Radioactive Upgrade"
+  "item.mekanismtrashcube.radioactive_upgrade": "Radioactive Upgrade",
+  "upgrade.mekanismtrashcube.radioactive": "Radioactive",
+  "upgrade.mekanismtrashcube.radioactive.desc": "Allows voiding radioactive chemicals.",
+  "upgrade.mekanismtrashcube.radioactive.supported_machines": "Trash Cube",
+  "gui.mekanismtrashcube.upgrades.effect": "Effect: Allows radioactive chemical deletion"
 }

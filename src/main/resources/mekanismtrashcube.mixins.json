@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "package": "com.github.mochi7054.trashcube.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "UpgradeInvoker",
+    "UpgradeMixin",
+    "UpgradeUtilsMixin",
+    "TileComponentUpgradeMixin",
+    "UpgradeInventorySlotMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

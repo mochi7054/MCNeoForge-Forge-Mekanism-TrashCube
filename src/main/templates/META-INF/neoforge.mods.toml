@@ -35,3 +35,7 @@ mandatory = true
 versionRange = "[10.7.19,)"
 ordering = "NONE"
 side = "BOTH"
+
+[[mixins]]
+config = "mekanismtrashcube.mixins.json"
+
