@@ -22,19 +22,10 @@ public class UpgradeInventorySlotMixin {
         ordinal = 0
     )
     private static Set<Upgrade> modifySupportedTypes(Set<Upgrade> supportedTypes, IContentsListener listener) {
-        if (supportedTypes != null && listener instanceof TileComponentUpgrade comp) {
-            try {
-                java.lang.reflect.Field tileField = TileComponentUpgrade.class.getDeclaredField("tile");
-                tileField.setAccessible(true);
-                Object tile = tileField.get(comp);
-                if (tile instanceof TrashCubeBlockEntity) {
-                    Set<Upgrade> mutableSet = new HashSet<>(supportedTypes);
-                    mutableSet.add(TrashCube.RADIOACTIVE_UPGRADE_TYPE);
-                    return mutableSet;
-                }
-            } catch (Exception e) {
-                // fallback
-            }
+        if (supportedTypes != null && listener instanceof TrashCubeBlockEntity) {
+            Set<Upgrade> mutableSet = new HashSet<>(supportedTypes);
+            mutableSet.add(TrashCube.RADIOACTIVE_UPGRADE_TYPE);
+            return mutableSet;
         }
         return supportedTypes;
     }
