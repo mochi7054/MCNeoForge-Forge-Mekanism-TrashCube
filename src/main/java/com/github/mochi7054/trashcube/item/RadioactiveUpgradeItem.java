@@ -1,5 +1,6 @@
 package com.github.mochi7054.trashcube.item;
 
+import com.github.mochi7054.trashcube.TrashCube;
 import mekanism.api.Upgrade;
 import mekanism.common.item.interfaces.IUpgradeItem;
 import net.minecraft.world.item.Item;
@@ -13,6 +14,6 @@ public class RadioactiveUpgradeItem extends Item implements IUpgradeItem {
 
     @Override
     public Upgrade getUpgradeType(ItemStack stack) {
-        return Upgrade.FILTER;
+        return TrashCube.RADIOACTIVE_UPGRADE_TYPE;
     }
 }

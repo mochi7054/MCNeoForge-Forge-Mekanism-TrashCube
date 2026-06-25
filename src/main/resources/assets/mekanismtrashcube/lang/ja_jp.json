@@ -7,5 +7,9 @@
   "advancements.mekanismtrashcube.root.description": "Mekanism: TrashCube",
   "advancements.mekanismtrashcube.trash_cube.title": "ごみの3乗",
   "advancements.mekanismtrashcube.trash_cube.description": "ごみキューブを取得する",
-  "item.mekanismtrashcube.radioactive_upgrade": "放射能アップグレード"
+  "item.mekanismtrashcube.radioactive_upgrade": "放射能アップグレード",
+  "upgrade.mekanismtrashcube.radioactive": "放射能",
+  "upgrade.mekanismtrashcube.radioactive.desc": "放射性化学物質の破棄を許可する。",
+  "upgrade.mekanismtrashcube.radioactive.supported_machines": "ごみキューブ",
+  "gui.mekanismtrashcube.upgrades.effect": "効果: 放射性化学物質の消滅を許可"
 }

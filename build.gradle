@@ -1,11 +1,13 @@
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
         maven { url = 'https://modmaven.dev/' }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.0.+', changing: true
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 
@@ -16,6 +18,7 @@ plugins {
 }
 
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.spongepowered.mixin'
 
 version = mod_version
 group = mod_group_id
@@ -65,6 +68,11 @@ minecraft {
             }
         }
     }
+}
+
+mixin {
+    add sourceSets.main, "mekanismtrashcube.refmap.json"
+    config "mekanismtrashcube.mixins.json"
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
