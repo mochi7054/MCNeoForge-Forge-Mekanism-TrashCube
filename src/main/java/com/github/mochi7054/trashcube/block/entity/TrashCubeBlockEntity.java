@@ -154,7 +154,15 @@ public class TrashCubeBlockEntity extends TileEntityMekanism implements MenuProv
     @Override
     public IChemicalTankHolder<Gas, GasStack, IGasTank> getInitialGasTanks(IContentsListener listener) {
         ChemicalTankHelper<Gas, GasStack, IGasTank> builder = ChemicalTankHelper.forSideGasWithConfig(this::getDirection, this::getConfig);
-        gasTank = ChemicalTankBuilder.GAS.create(1000000L, listener);
+        gasTank = ChemicalTankBuilder.GAS.createWithValidator(1000000L, new mekanism.api.chemical.attribute.ChemicalAttributeValidator() {
+            @Override
+            public boolean validate(mekanism.api.chemical.attribute.ChemicalAttribute attribute) {
+                if (attribute instanceof mekanism.api.chemical.gas.attribute.GasAttributes.Radiation) {
+                    return hasRadioactiveUpgrade();
+                }
+                return !attribute.needsValidation();
+            }
+        }, listener);
         builder.addTank(gasTank);
         return builder.build();
     }
@@ -163,7 +171,15 @@ public class TrashCubeBlockEntity extends TileEntityMekanism implements MenuProv
     @Override
     public IChemicalTankHolder<InfuseType, InfusionStack, IInfusionTank> getInitialInfusionTanks(IContentsListener listener) {
         ChemicalTankHelper<InfuseType, InfusionStack, IInfusionTank> builder = ChemicalTankHelper.forSideInfusionWithConfig(this::getDirection, this::getConfig);
-        infusionTank = ChemicalTankBuilder.INFUSION.create(1000000L, listener);
+        infusionTank = ChemicalTankBuilder.INFUSION.createWithValidator(1000000L, new mekanism.api.chemical.attribute.ChemicalAttributeValidator() {
+            @Override
+            public boolean validate(mekanism.api.chemical.attribute.ChemicalAttribute attribute) {
+                if (attribute instanceof mekanism.api.chemical.gas.attribute.GasAttributes.Radiation) {
+                    return hasRadioactiveUpgrade();
+                }
+                return !attribute.needsValidation();
+            }
+        }, listener);
         builder.addTank(infusionTank);
         return builder.build();
     }
@@ -172,7 +188,15 @@ public class TrashCubeBlockEntity extends TileEntityMekanism implements MenuProv
     @Override
     public IChemicalTankHolder<Pigment, PigmentStack, IPigmentTank> getInitialPigmentTanks(IContentsListener listener) {
         ChemicalTankHelper<Pigment, PigmentStack, IPigmentTank> builder = ChemicalTankHelper.forSidePigmentWithConfig(this::getDirection, this::getConfig);
-        pigmentTank = ChemicalTankBuilder.PIGMENT.create(1000000L, listener);
+        pigmentTank = ChemicalTankBuilder.PIGMENT.createWithValidator(1000000L, new mekanism.api.chemical.attribute.ChemicalAttributeValidator() {
+            @Override
+            public boolean validate(mekanism.api.chemical.attribute.ChemicalAttribute attribute) {
+                if (attribute instanceof mekanism.api.chemical.gas.attribute.GasAttributes.Radiation) {
+                    return hasRadioactiveUpgrade();
+                }
+                return !attribute.needsValidation();
+            }
+        }, listener);
         builder.addTank(pigmentTank);
         return builder.build();
     }
@@ -181,7 +205,15 @@ public class TrashCubeBlockEntity extends TileEntityMekanism implements MenuProv
     @Override
     public IChemicalTankHolder<Slurry, SlurryStack, ISlurryTank> getInitialSlurryTanks(IContentsListener listener) {
         ChemicalTankHelper<Slurry, SlurryStack, ISlurryTank> builder = ChemicalTankHelper.forSideSlurryWithConfig(this::getDirection, this::getConfig);
-        slurryTank = ChemicalTankBuilder.SLURRY.create(1000000L, listener);
+        slurryTank = ChemicalTankBuilder.SLURRY.createWithValidator(1000000L, new mekanism.api.chemical.attribute.ChemicalAttributeValidator() {
+            @Override
+            public boolean validate(mekanism.api.chemical.attribute.ChemicalAttribute attribute) {
+                if (attribute instanceof mekanism.api.chemical.gas.attribute.GasAttributes.Radiation) {
+                    return hasRadioactiveUpgrade();
+                }
+                return !attribute.needsValidation();
+            }
+        }, listener);
         builder.addTank(slurryTank);
         return builder.build();
     }
@@ -314,6 +346,13 @@ public class TrashCubeBlockEntity extends TileEntityMekanism implements MenuProv
         if (ejectorComponent != null) {
             ejectorComponent.read(tag);
         }
+    }
+
+    public boolean hasRadioactiveUpgrade() {
+        if (supportsUpgrades()) {
+            return getComponent().getUpgrades(mekanism.api.Upgrade.FILTER) > 0;
+        }
+        return false;
     }
 
     public static class TrashInventorySlot extends BasicInventorySlot {

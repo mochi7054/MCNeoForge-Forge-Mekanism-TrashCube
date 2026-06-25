@@ -3,6 +3,7 @@ package com.github.mochi7054.trashcube;
 import com.github.mochi7054.trashcube.block.TrashCubeBlock;
 import com.github.mochi7054.trashcube.block.entity.TrashCubeBlockEntity;
 import com.github.mochi7054.trashcube.inventory.TrashCubeMenu;
+import com.github.mochi7054.trashcube.item.RadioactiveUpgradeItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
@@ -31,6 +32,9 @@ public class TrashCube {
                     () -> new TrashCubeBlock(BlockBehaviour.Properties.of().strength(3.5F).noOcclusion()),
                     block -> new mekanism.common.item.block.ItemBlockTooltip(block, new Item.Properties()));
 
+    public static final mekanism.common.registration.impl.ItemRegistryObject<RadioactiveUpgradeItem> RADIOACTIVE_UPGRADE =
+            ITEMS.register("radioactive_upgrade", () -> new RadioactiveUpgradeItem(new Item.Properties().stacksTo(mekanism.api.Upgrade.FILTER.getMax())));
+
     public static final mekanism.common.registration.impl.TileEntityTypeRegistryObject<TrashCubeBlockEntity> TILE =
             BLOCK_ENTITIES.register(BLOCK, TrashCubeBlockEntity::new,
                     mekanism.common.tile.base.TileEntityMekanism::tickClient,
@@ -47,6 +51,7 @@ public class TrashCube {
             .icon(() -> BLOCK.asItem().getDefaultInstance())
             .displayItems((parameters, output) -> {
                 output.accept(BLOCK.asItem());
+                output.accept(RADIOACTIVE_UPGRADE.asItem());
             }).build());
 
     public TrashCube() {

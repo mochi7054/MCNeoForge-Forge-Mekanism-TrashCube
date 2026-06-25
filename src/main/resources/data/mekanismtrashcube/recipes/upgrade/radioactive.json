@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "gfg",
+    "ror",
+    "gfg"
+  ],
+  "key": {
+    "g": {
+      "item": "minecraft:glass"
+    },
+    "f": {
+      "tag": "forge:alloys/infused"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "o": {
+      "tag": "forge:ingots/lead"
+    }
+  },
+  "result": {
+    "item": "mekanismtrashcube:radioactive_upgrade"
+  }
+}

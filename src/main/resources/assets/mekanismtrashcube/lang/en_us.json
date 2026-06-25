@@ -6,5 +6,6 @@
   "gui.mekanismtrashcube.throw_here": "Throw it here!",
   "advancements.mekanismtrashcube.root.description": "Mekanism: TrashCube",
   "advancements.mekanismtrashcube.trash_cube.title": "Trash Cubed",
-  "advancements.mekanismtrashcube.trash_cube.description": "Obtain a Trash Cube"
+  "advancements.mekanismtrashcube.trash_cube.description": "Obtain a Trash Cube",
+  "item.mekanismtrashcube.radioactive_upgrade": "Radioactive Upgrade"
 }
