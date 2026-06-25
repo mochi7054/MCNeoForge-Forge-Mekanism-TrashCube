@@ -44,6 +44,8 @@ public class TrashCubeBlock extends BlockTile<TrashCubeBlockEntity, BlockTypeTil
     }
 
     private static BlockTypeTile<TrashCubeBlockEntity> createBlockType() {
+        Upgrade.values(); // Force classloading to initialize RADIOACTIVE_UPGRADE_TYPE
+
         ILangEntry langEntry = new ILangEntry() {
             @Override
             public String getTranslationKey() {
@@ -70,7 +72,7 @@ public class TrashCubeBlock extends BlockTile<TrashCubeBlockEntity, BlockTypeTil
 
         blockType.add(
             new mekanism.common.block.attribute.AttributeEnergy(() -> FloatingLong.ZERO, () -> FloatingLong.MAX_VALUE),
-            new mekanism.common.block.attribute.AttributeUpgradeSupport(java.util.Set.of(Upgrade.FILTER)),
+            new mekanism.common.block.attribute.AttributeUpgradeSupport(java.util.Set.of(TrashCube.RADIOACTIVE_UPGRADE_TYPE)),
             mekanism.common.block.attribute.Attributes.ACTIVE,
             mekanism.common.block.attribute.Attributes.REDSTONE,
             mekanism.common.block.attribute.Attributes.SECURITY,
