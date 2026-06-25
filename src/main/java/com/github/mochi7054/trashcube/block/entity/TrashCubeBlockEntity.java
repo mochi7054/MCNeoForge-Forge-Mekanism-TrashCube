@@ -50,6 +50,9 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import mekanism.api.Upgrade;
+import mekanism.api.Action;
+import mekanism.api.AutomationType;
 
 import java.util.Arrays;
 
@@ -98,6 +101,12 @@ public class TrashCubeBlockEntity extends TileEntityMekanism implements MenuProv
         configComponent.setupInputConfig(mekanism.common.lib.transmitter.TransmissionType.PIGMENT, pigmentTank);
         configComponent.setupInputConfig(mekanism.common.lib.transmitter.TransmissionType.SLURRY, slurryTank);
         configComponent.setupInputConfig(mekanism.common.lib.transmitter.TransmissionType.ENERGY, energyContainer);
+
+        // Replace default upgradeComponent with our custom subclass to handle custom upgrade ejection properly
+        if (this.upgradeComponent != null) {
+            getComponents().remove(this.upgradeComponent);
+            this.upgradeComponent = new TrashCubeUpgradeComponent(this);
+        }
     }
 
     public BasicInventorySlot[] getTrashSlots() {
@@ -370,6 +379,60 @@ public class TrashCubeBlockEntity extends TileEntityMekanism implements MenuProv
         @Override
         public int getLimit(ItemStack stack) {
             return Integer.MAX_VALUE;
+        }
+    }
+
+    public static class TrashCubeUpgradeComponent extends mekanism.common.tile.component.TileComponentUpgrade {
+        private static final java.lang.reflect.Field UPGRADES_FIELD;
+        static {
+            try {
+                UPGRADES_FIELD = mekanism.common.tile.component.TileComponentUpgrade.class.getDeclaredField("upgrades");
+                UPGRADES_FIELD.setAccessible(true);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        private final mekanism.common.tile.base.TileEntityMekanism tileEntity;
+
+        public TrashCubeUpgradeComponent(mekanism.common.tile.base.TileEntityMekanism tile) {
+            super(tile);
+            this.tileEntity = tile;
+        }
+
+        @SuppressWarnings("unchecked")
+        private java.util.Map<Upgrade, Integer> getUpgradesMap() {
+            try {
+                return (java.util.Map<Upgrade, Integer>) UPGRADES_FIELD.get(this);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public void removeUpgrade(Upgrade upgrade, boolean all) {
+            if (upgrade == Upgrade.FILTER) {
+                int count = getUpgrades(upgrade);
+                if (count > 0) {
+                    int toRemove = all ? count : 1;
+                    ItemStack stack = new ItemStack(TrashCube.RADIOACTIVE_UPGRADE.asItem(), toRemove);
+                    ItemStack reject = getUpgradeOutputSlot().insertItem(stack, Action.SIMULATE, AutomationType.INTERNAL);
+                    int actualRemoved = toRemove - reject.getCount();
+                    if (actualRemoved > 0) {
+                        getUpgradeOutputSlot().insertItem(new ItemStack(TrashCube.RADIOACTIVE_UPGRADE.asItem(), actualRemoved), Action.EXECUTE, AutomationType.INTERNAL);
+                        int remaining = count - actualRemoved;
+                        java.util.Map<Upgrade, java.lang.Integer> upgradesMap = getUpgradesMap();
+                        if (remaining == 0) {
+                            upgradesMap.remove(upgrade);
+                        } else {
+                            upgradesMap.put(upgrade, remaining);
+                        }
+                        this.tileEntity.recalculateUpgrades(upgrade);
+                    }
+                }
+            } else {
+                super.removeUpgrade(upgrade, all);
+            }
         }
     }
 }
