@@ -4,6 +4,7 @@ import com.github.mochi7054.trashcube.block.TrashCubeBlock;
 import com.github.mochi7054.trashcube.block.entity.TrashCubeBlockEntity;
 import com.github.mochi7054.trashcube.inventory.TrashCubeMenu;
 import com.github.mochi7054.trashcube.item.RadioactiveUpgradeItem;
+import com.github.mochi7054.trashcube.item.TrashCubeBlockItem;
 import mekanism.api.Upgrade;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -28,10 +29,10 @@ public class TrashCube {
     public static final mekanism.common.registration.impl.ContainerTypeDeferredRegister MENU_TYPES = new mekanism.common.registration.impl.ContainerTypeDeferredRegister(MODID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
-    public static final mekanism.common.registration.impl.BlockRegistryObject<TrashCubeBlock, mekanism.common.item.block.ItemBlockTooltip> BLOCK =
+    public static final mekanism.common.registration.impl.BlockRegistryObject<TrashCubeBlock, TrashCubeBlockItem> BLOCK =
             BLOCKS.register("trash_cube",
                     () -> new TrashCubeBlock(BlockBehaviour.Properties.of().strength(3.5F).requiresCorrectToolForDrops().noOcclusion()),
-                    block -> new mekanism.common.item.block.ItemBlockTooltip(block, new Item.Properties()));
+                    TrashCubeBlockItem::new);
 
     public static Upgrade RADIOACTIVE_UPGRADE_TYPE;
 
