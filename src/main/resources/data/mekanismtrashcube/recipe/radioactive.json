@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "gfg",
+    "ror",
+    "gfg"
+  ],
+  "key": {
+    "g": {
+      "tag": "c:glass_blocks/cheap"
+    },
+    "f": {
+      "tag": "mekanism:alloys/infused"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "o": {
+      "tag": "c:ingots/lead"
+    }
+  },
+  "result": {
+    "id": "mekanismtrashcube:radioactive_upgrade"
+  }
+}

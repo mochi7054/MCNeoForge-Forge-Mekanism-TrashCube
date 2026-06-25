@@ -3,6 +3,8 @@ package com.github.mochi7054.trashcube;
 import com.github.mochi7054.trashcube.block.TrashCubeBlock;
 import com.github.mochi7054.trashcube.block.entity.TrashCubeBlockEntity;
 import com.github.mochi7054.trashcube.inventory.TrashCubeMenu;
+import com.github.mochi7054.trashcube.item.RadioactiveUpgradeItem;
+import mekanism.api.Upgrade;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -12,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 @Mod(TrashCube.MODID)
@@ -28,6 +31,10 @@ public class TrashCube {
             BLOCKS.register("trash_cube",
                     () -> new TrashCubeBlock(BlockBehaviour.Properties.of().strength(3.5F).noOcclusion()),
                     mekanism.common.item.block.ItemBlockTooltip::new);
+
+    public static final DeferredItem<RadioactiveUpgradeItem> RADIOACTIVE_UPGRADE =
+            ITEMS.register("radioactive_upgrade",
+                    () -> new RadioactiveUpgradeItem(new Item.Properties().stacksTo(Upgrade.FILTER.getMax())));
 
     public static final mekanism.common.registration.impl.TileEntityTypeRegistryObject<TrashCubeBlockEntity> TILE =
             BLOCK_ENTITIES.mekBuilder(BLOCK, TrashCubeBlockEntity::new)
@@ -46,6 +53,7 @@ public class TrashCube {
             .icon(() -> BLOCK.asItem().getDefaultInstance())
             .displayItems((parameters, output) -> {
                 output.accept(BLOCK.asItem());
+                output.accept(RADIOACTIVE_UPGRADE.asItem());
             }).build());
 
     public TrashCube(IEventBus modEventBus) {

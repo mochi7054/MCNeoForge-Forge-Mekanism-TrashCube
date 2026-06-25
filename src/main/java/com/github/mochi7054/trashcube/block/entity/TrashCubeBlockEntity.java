@@ -116,7 +116,15 @@ public class TrashCubeBlockEntity extends TileEntityMekanism implements MenuProv
     @Override
     public IChemicalTankHolder getInitialChemicalTanks(IContentsListener listener) {
         ChemicalTankHelper builder = ChemicalTankHelper.forSideWithConfig(this);
-        chemicalTank = BasicChemicalTank.create(1000000L, listener);
+        chemicalTank = BasicChemicalTank.createWithValidator(1000000L, new mekanism.api.chemical.attribute.ChemicalAttributeValidator() {
+            @Override
+            public boolean validate(mekanism.api.chemical.attribute.ChemicalAttribute attribute) {
+                if (attribute instanceof mekanism.api.chemical.attribute.ChemicalAttributes.Radiation) {
+                    return hasRadioactiveUpgrade();
+                }
+                return !attribute.needsValidation();
+            }
+        }, listener);
         builder.addTank(chemicalTank);
         return builder.build();
     }
@@ -230,6 +238,13 @@ public class TrashCubeBlockEntity extends TileEntityMekanism implements MenuProv
         if (ejectorComponent != null) {
             ejectorComponent.read(tag, provider);
         }
+    }
+
+    public boolean hasRadioactiveUpgrade() {
+        if (supportsUpgrades()) {
+            return getComponent().getUpgrades(mekanism.api.Upgrade.FILTER) > 0;
+        }
+        return false;
     }
 
     public static class TrashInventorySlot extends BasicInventorySlot {

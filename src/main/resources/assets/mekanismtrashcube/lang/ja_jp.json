@@ -6,5 +6,6 @@
   "gui.mekanismtrashcube.throw_here": "ここに投げて！",
   "advancements.mekanismtrashcube.root.description": "Mekanism: TrashCube",
   "advancements.mekanismtrashcube.trash_cube.title": "ごみの3乗",
-  "advancements.mekanismtrashcube.trash_cube.description": "ごみキューブを取得する"
+  "advancements.mekanismtrashcube.trash_cube.description": "ごみキューブを取得する",
+  "item.mekanismtrashcube.radioactive_upgrade": "放射能アップグレード"
 }
