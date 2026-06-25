@@ -26,7 +26,7 @@ public abstract class UpgradeMixin {
     @Shadow
     @Final
     @Mutable
-    private static java.util.function.IntFunction<Upgrade> BY_ID;
+    private static Upgrade[] UPGRADES;
 
     @Inject(method = "<clinit>", at = @At("RETURN"))
     private static void onClinit(CallbackInfo ci) {
@@ -40,16 +40,7 @@ public abstract class UpgradeMixin {
         Upgrade[] newValues = Arrays.copyOf(oldValues, oldValues.length + 1);
         newValues[oldValues.length] = radioactiveUpgrade;
         $VALUES = newValues;
-
-        // Override BY_ID
-        java.util.function.IntFunction<Upgrade> originalById = BY_ID;
-        final int targetId = newOrdinal;
-        BY_ID = id -> {
-            if (id == targetId) {
-                return radioactiveUpgrade;
-            }
-            return originalById != null ? originalById.apply(id) : null;
-        };
+        UPGRADES = newValues;
     }
 
     @Inject(method = "getTranslationKey", at = @At("HEAD"), cancellable = true)
