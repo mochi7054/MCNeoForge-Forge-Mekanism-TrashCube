@@ -43,9 +43,12 @@ public class UpgradeMixin {
         return result;
     }
 
-    @org.spongepowered.asm.mixin.Overwrite
-    public static Upgrade byIndexStatic(int index) {
-        return mekanism.api.math.MathUtils.getByIndexMod(Upgrade.values(), index);
+    @org.spongepowered.asm.mixin.injection.Inject(method = "byIndexStatic", at = @At("HEAD"), cancellable = true)
+    private static void onByIndexStatic(int index, org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<Upgrade> cir) {
+        Upgrade[] vals = Upgrade.values();
+        int len = vals.length;
+        int r = index % len;
+        cir.setReturnValue(vals[r < 0 ? r + len : r]);
     }
 
     @Inject(method = "<clinit>", at = @At("TAIL"))
