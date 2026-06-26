@@ -11,5 +11,7 @@
   "upgrade.mekanismtrashcube.radioactive": "Radioactive",
   "upgrade.mekanismtrashcube.radioactive.desc": "Allows voiding radioactive chemicals.",
   "upgrade.mekanismtrashcube.radioactive.supported_machines": "Trash Cube",
-  "gui.mekanismtrashcube.upgrades.effect": "Effect: Allows radioactive chemical deletion"
+  "gui.mekanismtrashcube.upgrades.effect": "Effect: Allows radioactive chemical deletion",
+  "advancements.mekanismtrashcube.radioactive_upgrade.title": "I messed up.",
+  "advancements.mekanismtrashcube.radioactive_upgrade.description": "How do you even dispose of this? Obtain a Radioactive Upgrade"
 }
