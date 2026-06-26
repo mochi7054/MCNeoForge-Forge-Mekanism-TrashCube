@@ -1,0 +1,37 @@
+{
+  "parent": "mekanismtrashcube:root",
+  "display": {
+    "icon": {
+      "item": "mekanismtrashcube:radioactive_upgrade"
+    },
+    "title": {
+      "translate": "advancements.mekanismtrashcube.radioactive_upgrade.title"
+    },
+    "description": {
+      "translate": "advancements.mekanismtrashcube.radioactive_upgrade.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has_radioactive_upgrade": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "mekanismtrashcube:radioactive_upgrade"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_radioactive_upgrade"
+    ]
+  ]
+}

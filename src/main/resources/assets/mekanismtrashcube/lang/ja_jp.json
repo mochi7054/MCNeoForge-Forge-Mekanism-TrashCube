@@ -11,5 +11,7 @@
   "upgrade.mekanismtrashcube.radioactive": "放射能",
   "upgrade.mekanismtrashcube.radioactive.desc": "放射性化学物質の破棄を許可する。",
   "upgrade.mekanismtrashcube.radioactive.supported_machines": "ごみキューブ",
-  "gui.mekanismtrashcube.upgrades.effect": "効果: 放射性化学物質の消滅を許可"
+  "gui.mekanismtrashcube.upgrades.effect": "効果: 放射性化学物質の消滅を許可",
+  "advancements.mekanismtrashcube.radioactive_upgrade.title": "やらかした。",
+  "advancements.mekanismtrashcube.radioactive_upgrade.description": "これ、どうやって処分してるんだ？ Radioactive Upgradeを入手する"
 }
