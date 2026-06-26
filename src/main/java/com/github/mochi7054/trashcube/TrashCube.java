@@ -41,8 +41,8 @@ public class TrashCube {
 
     public static final mekanism.common.registration.impl.TileEntityTypeRegistryObject<TrashCubeBlockEntity> TILE =
             BLOCK_ENTITIES.register(BLOCK, TrashCubeBlockEntity::new,
-                    mekanism.common.tile.base.TileEntityMekanism::tickClient,
-                    mekanism.common.tile.base.TileEntityMekanism::tickServer);
+                    mekanism.common.tile.base.TileEntityMekanism::tickServer,
+                    mekanism.common.tile.base.TileEntityMekanism::tickClient);
 
     public static final mekanism.common.registration.impl.ContainerTypeRegistryObject<TrashCubeMenu> CONTAINER_TYPE =
             MENU_TYPES.register("trash_cube",
