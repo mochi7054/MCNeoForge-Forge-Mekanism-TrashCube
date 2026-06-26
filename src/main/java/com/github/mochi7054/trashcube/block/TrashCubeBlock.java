@@ -41,7 +41,7 @@ public class TrashCubeBlock extends BlockTile<TrashCubeBlockEntity, BlockTypeTil
 
         blockType.add(
             new mekanism.common.block.attribute.AttributeEnergy(() -> 0L, () -> 1000000000000L),
-            mekanism.common.block.attribute.AttributeUpgradeSupport.create(TrashCube.RADIOACTIVE_UPGRADE_TYPE),
+            mekanism.common.block.attribute.AttributeUpgradeSupport.create(Upgrade.ANCHOR, TrashCube.RADIOACTIVE_UPGRADE_TYPE),
             mekanism.common.block.attribute.AttributeSideConfig.create(
                 TransmissionType.ITEM,
                 TransmissionType.ENERGY,

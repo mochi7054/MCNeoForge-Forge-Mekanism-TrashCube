@@ -36,15 +36,19 @@ import org.jetbrains.annotations.Nullable;
 import mekanism.api.Upgrade;
 import mekanism.api.Action;
 import mekanism.api.AutomationType;
+import mekanism.common.lib.chunkloading.IChunkLoader;
+import mekanism.common.tile.component.TileComponentChunkLoader;
+import net.minecraft.world.level.ChunkPos;
 
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
 
-public class TrashCubeBlockEntity extends TileEntityMekanism implements MenuProvider, ISideConfiguration {
+public class TrashCubeBlockEntity extends TileEntityMekanism implements MenuProvider, ISideConfiguration, IChunkLoader {
 
     public TileComponentConfig configComponent;
     public mekanism.common.tile.component.TileComponentEjector ejectorComponent;
+    private final TileComponentChunkLoader<TrashCubeBlockEntity> chunkLoaderComponent;
 
     private BasicInventorySlot[] trashSlots;
     private BasicFluidTank fluidTank;
@@ -67,6 +71,7 @@ public class TrashCubeBlockEntity extends TileEntityMekanism implements MenuProv
             initConfigComponent();
         }
         ejectorComponent = new mekanism.common.tile.component.TileComponentEjector(this);
+        chunkLoaderComponent = new TileComponentChunkLoader<>(this);
 
         // Setup side configs for Item, Fluid, Chemical, Energy
         mekanism.common.tile.component.config.ConfigInfo itemConfig = configComponent.getConfig(TransmissionType.ITEM);
@@ -250,7 +255,7 @@ public class TrashCubeBlockEntity extends TileEntityMekanism implements MenuProv
         if (TrashCube.RADIOACTIVE_UPGRADE_TYPE == null) {
             mekanism.api.Upgrade.values();
         }
-        return Set.of(TrashCube.RADIOACTIVE_UPGRADE_TYPE);
+        return Set.of(Upgrade.ANCHOR, TrashCube.RADIOACTIVE_UPGRADE_TYPE);
     }
 
     public boolean hasRadioactiveUpgrade() {
@@ -258,6 +263,24 @@ public class TrashCubeBlockEntity extends TileEntityMekanism implements MenuProv
             return getComponent().getUpgrades(TrashCube.RADIOACTIVE_UPGRADE_TYPE) > 0;
         }
         return false;
+    }
+
+    @Override
+    public TileComponentChunkLoader<TrashCubeBlockEntity> getChunkLoader() {
+        return chunkLoaderComponent;
+    }
+
+    @Override
+    public Set<ChunkPos> getChunkSet() {
+        return Set.of(new ChunkPos(getBlockPos()));
+    }
+
+    @Override
+    public void recalculateUpgrades(Upgrade upgrade) {
+        super.recalculateUpgrades(upgrade);
+        if (upgrade == Upgrade.ANCHOR) {
+            chunkLoaderComponent.refreshChunkTickets();
+        }
     }
 
     public static class TrashInventorySlot extends BasicInventorySlot {
