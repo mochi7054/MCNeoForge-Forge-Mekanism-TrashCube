@@ -65,14 +65,6 @@ public class UpgradeMixin {
         Upgrade[] newVALUES = Arrays.copyOf($VALUES, index + 1);
         newVALUES[index] = result;
         $VALUES = newVALUES;
-
-        Upgrade[] values = Upgrade.values();
-        BY_ID = ByIdMap.continuous(Enum::ordinal, values, OutOfBoundsStrategy.WRAP);
-        STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, Enum::ordinal);
-        Function<String, Upgrade> nameLookup = StringRepresentable.createNameLookup(values, Function.identity());
-        Function<String, Upgrade> remapper = it -> "gas".equals(it) ? Upgrade.CHEMICAL : nameLookup.apply(it);
-        CODEC = new EnumCodec<>(values, remapper);
-
         return result;
     }
 
@@ -84,6 +76,31 @@ public class UpgradeMixin {
             TrashCubeAPILang.UPGRADE_RADIOACTIVE_DESCRIPTION,
             1,
             EnumColor.DARK_GREEN
+        );
+
+        // Dynamically resolve enum by index to handle runtime expansion and prevent caching issues
+        BY_ID = index -> {
+            Upgrade[] vals = Upgrade.values();
+            int len = vals.length;
+            int r = index % len;
+            return vals[r < 0 ? r + len : r];
+        };
+
+        STREAM_CODEC = net.minecraft.network.codec.ByteBufCodecs.idMapper(BY_ID, Upgrade::ordinal);
+
+        CODEC = com.mojang.serialization.Codec.STRING.flatXmap(
+            s -> {
+                for (Upgrade u : Upgrade.values()) {
+                    if (u.getSerializedName().equals(s)) {
+                        return com.mojang.serialization.DataResult.success(u);
+                    }
+                }
+                if ("gas".equals(s)) {
+                    return com.mojang.serialization.DataResult.success(Upgrade.CHEMICAL);
+                }
+                return com.mojang.serialization.DataResult.error(() -> "Unknown upgrade: " + s);
+            },
+            u -> com.mojang.serialization.DataResult.success(u.getSerializedName())
         );
     }
 }
