@@ -26,11 +26,6 @@ public class UpgradeMixin {
     @SuppressWarnings("target")
     static Upgrade[] $VALUES;
 
-    @Shadow
-    @Final
-    @Mutable
-    static Upgrade[] UPGRADES;
-
     @Invoker("<init>")
     private static Upgrade invokeInit(String internalName, int ordinal, String name, APILang langKey,
             APILang descLangKey, int maxStack, EnumColor color) {
@@ -45,8 +40,12 @@ public class UpgradeMixin {
         Upgrade[] newVALUES = Arrays.copyOf($VALUES, index + 1);
         newVALUES[index] = result;
         $VALUES = newVALUES;
-        UPGRADES = Upgrade.values();
         return result;
+    }
+
+    @org.spongepowered.asm.mixin.Overwrite
+    public static Upgrade byIndexStatic(int index) {
+        return mekanism.api.math.MathUtils.getByIndexMod(Upgrade.values(), index);
     }
 
     @Inject(method = "<clinit>", at = @At("TAIL"))
