@@ -30,7 +30,7 @@ public class TrashCube {
 
     public static final mekanism.common.registration.impl.BlockRegistryObject<TrashCubeBlock, TrashCubeBlockItem> BLOCK =
             BLOCKS.register("trash_cube",
-                    () -> new TrashCubeBlock(BlockBehaviour.Properties.of().strength(3.5F).requiresCorrectToolForDrops().noOcclusion()),
+                    () -> new TrashCubeBlock(BlockBehaviour.Properties.of().strength(3.5F, 16).requiresCorrectToolForDrops().noOcclusion()),
                     TrashCubeBlockItem::new);
 
     public static Upgrade RADIOACTIVE_UPGRADE_TYPE;
