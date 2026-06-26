@@ -17,7 +17,12 @@ import org.jetbrains.annotations.Nullable;
 public class RadioactiveUpgradeItem extends ItemUpgrade {
 
     public RadioactiveUpgradeItem(Properties properties) {
-        super(Upgrade.FILTER, properties);
+        super(getUpgradeTypeForceLoad(), properties);
+    }
+
+    private static Upgrade getUpgradeTypeForceLoad() {
+        Upgrade.values();
+        return com.github.mochi7054.trashcube.TrashCube.RADIOACTIVE_UPGRADE_TYPE;
     }
 
     @Override

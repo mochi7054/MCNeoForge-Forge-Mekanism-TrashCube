@@ -8,6 +8,7 @@ import mekanism.common.lib.transmitter.TransmissionType;
 import mekanism.common.block.interfaces.IHasDescription;
 import mekanism.api.text.ILangEntry;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import mekanism.api.Upgrade;
 
 public class TrashCubeBlock extends BlockTile<TrashCubeBlockEntity, BlockTypeTile<TrashCubeBlockEntity>> implements IHasDescription {
 
@@ -26,6 +27,8 @@ public class TrashCubeBlock extends BlockTile<TrashCubeBlockEntity, BlockTypeTil
     }
 
     private static BlockTypeTile<TrashCubeBlockEntity> createBlockType() {
+        Upgrade.values(); // Force classloading to initialize RADIOACTIVE_UPGRADE_TYPE
+
         BlockTypeTile<TrashCubeBlockEntity> blockType = new BlockTypeTile<>(
             () -> TrashCube.TILE,
             new mekanism.api.text.ILangEntry() {
@@ -38,7 +41,7 @@ public class TrashCubeBlock extends BlockTile<TrashCubeBlockEntity, BlockTypeTil
 
         blockType.add(
             new mekanism.common.block.attribute.AttributeEnergy(() -> 0L, () -> 1000000000000L),
-            mekanism.common.block.attribute.AttributeUpgradeSupport.create(mekanism.api.Upgrade.FILTER),
+            mekanism.common.block.attribute.AttributeUpgradeSupport.create(TrashCube.RADIOACTIVE_UPGRADE_TYPE),
             mekanism.common.block.attribute.AttributeSideConfig.create(
                 TransmissionType.ITEM,
                 TransmissionType.ENERGY,
