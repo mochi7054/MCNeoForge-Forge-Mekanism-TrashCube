@@ -355,6 +355,9 @@ public class TrashCubeBlockEntity extends TileEntityMekanism implements MenuProv
 
     @Override
     public Set<mekanism.api.Upgrade> getSupportedUpgrade() {
+        if (TrashCube.RADIOACTIVE_UPGRADE_TYPE == null) {
+            mekanism.api.Upgrade.values();
+        }
         return Set.of(TrashCube.RADIOACTIVE_UPGRADE_TYPE);
     }
 
